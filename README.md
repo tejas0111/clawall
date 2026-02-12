@@ -13,8 +13,7 @@
 
 [Download or View Demo Video](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4)
 
-<video src="https://github.com/tejas0111/clawall/blob/main/src/demos/demo.mp4?raw=true" controls="controls" style="max-width: 100%;">
-</video>
+https://github.com/user-attachments/assets/fc65a8e4-b268-4217-bae7-98133d1a7ec6
 
 
 ---
