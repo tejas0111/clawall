@@ -1,17 +1,21 @@
 # 🦞 ClawAll
+![ClawAll Header](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/clawall.png)
 ### Autonomous AI Constraint & Governance Layer for Sui
 
 > AI agents should not have raw execution power.
 > ClawAll gives them guardrails, enforcement, and human override.
 
-https://raw.githubusercontent.com/tejas0111/clawall/src/demos/clawall.png
 ---
 
 ## 🎥 Demo Video
 
 > **Watch ClawAll intercept a high-risk transfer, trigger Telegram approval, and engage the kill-switch in real time.**
 
-https://raw.githubusercontent.com/tejas0111/clawall/src/demos/demo.mp4
+[Download or View Demo Video](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4)
+
+<video src="https://github.com/user-attachments/assets/981ed620-43d8-4acd-8646-404d6f59c716" controls="controls" style="max-width: 100%;">
+  Your browser does not support the video tag.
+</video>
 
 
 ---
@@ -184,7 +188,7 @@ Every transfer emits:
 - `amount`
 - `recipient`
 - `timestamp`
-- Walrus audit blob
+- `Walrus audit blob`
 
 You can view any transaction via:
 
