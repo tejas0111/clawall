@@ -1,0 +1,14 @@
+{
+  "name": "constraint-layer",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "demo": "TEST_MODE=0 node src/demos/demo.mjs"
+  },
+  "dependencies": {
+    "@mysten/sui": "^2.0.1",
+    "@mysten/walrus": "^1.0.1",
+    "dotenv": "^16.0.0",
+    "fs": "^0.0.1-security"
+  }
+}

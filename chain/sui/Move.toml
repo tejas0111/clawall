@@ -1,0 +1,10 @@
+[package]
+name = "constraint_layer"
+version = "0.2.0"
+edition = "2024.beta"
+
+[dependencies]
+Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
+
+[addresses]
+constraint_layer = "0x0"
