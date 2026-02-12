@@ -13,7 +13,7 @@
 
 [Download or View Demo Video](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4)
 
-<video src="https://github.com/user-attachments/assets/fc65a8e4-b268-4217-bae7-98133d1a7ec6" controls="controls" style="max-width: 100%;">
+<video src="https://github.com/user-attachments/assets/981ed620-43d8-4acd-8646-404d6f59c716" controls="controls" style="max-width: 100%;">
   Your browser does not support the video tag.
 </video>
 
