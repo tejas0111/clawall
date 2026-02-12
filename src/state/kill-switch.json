@@ -1,0 +1,8 @@
+{
+  "frozen": false,
+  "reason": null,
+  "triggered_at": null,
+  "expires_at": null,
+  "triggered_by": "RESET_AGENT_STATE",
+  "last_alert_at": 0
+}
