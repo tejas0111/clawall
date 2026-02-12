@@ -13,7 +13,8 @@
 
 [Download or View Demo Video](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4)
 
-<video src="https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4" controls width="100%"></video>
+<video src="https://github.com/tejas0111/clawall/blob/main/src/demos/demo.mp4?raw=true" controls="controls" style="max-width: 100%;">
+</video>
 
 
 ---
