@@ -4,14 +4,16 @@
 > AI agents should not have raw execution power.
 > ClawAll gives them guardrails, enforcement, and human override.
 
-https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/clawall.png
+![ClawAll Header](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/clawall.png)
 ---
 
 ## 🎥 Demo Video
 
 > **Watch ClawAll intercept a high-risk transfer, trigger Telegram approval, and engage the kill-switch in real time.**
 
-https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4
+[Download or View Demo Video](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4)
+
+<video src="https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4" controls width="100%"></video>
 
 
 ---
