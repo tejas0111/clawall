@@ -184,7 +184,7 @@ Every transfer emits:
 - `amount`
 - `recipient`
 - `timestamp`
-- Walrus audit blob
+- `Walrus audit blob`
 
 You can view any transaction via:
 
