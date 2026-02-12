@@ -117,6 +117,7 @@ export async function mintAndExecute({
   if (TEST_MODE) {
     return {
       ok: true,
+      decision: 'EXECUTED',
       digest: '0xTEST_' + Date.now(),
       walrusBlobId: 'walrus-test-' + Date.now(),
       effects: { status: { status: 'success' } },
@@ -125,6 +126,8 @@ export async function mintAndExecute({
   }
 
   try {
+    // Kill-switch is the only gate left in the SDK —
+    // it's a hard stop that must be checked at every layer.
     if (isFrozen()) {
       return {
         ok: false,
@@ -156,6 +159,7 @@ export async function mintAndExecute({
 
     return {
       ok: true,
+      decision: 'EXECUTED',
       digest: result.digest,
       walrusBlobId,
       effects: result.effects,
