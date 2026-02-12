@@ -1,10 +1,10 @@
 # 🦞 ClawAll
+![ClawAll Header](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/clawall.png)
 ### Autonomous AI Constraint & Governance Layer for Sui
 
 > AI agents should not have raw execution power.
 > ClawAll gives them guardrails, enforcement, and human override.
 
-![ClawAll Header](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/clawall.png)
 ---
 
 ## 🎥 Demo Video
