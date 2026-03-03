@@ -1,5 +1,5 @@
 # ClawAll
-![ClawAll Header](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/clawall.png)
+![ClawAll Header](src/demos/clawall.png)
 
 AI safety firewall and governance runtime for autonomous OpenClaw agents on Sui.
 
