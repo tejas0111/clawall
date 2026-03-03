@@ -1,14 +1,40 @@
 {
-  "name": "constraint-layer",
+  "name": "clawall-constraint-engine",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "demo": "TEST_MODE=0 node src/demos/demo.mjs"
+    "demo": "node src/demos/demo.mjs",
+    "test": "node --test",
+    "policy:sign": "node src/enforcement/sign-policy-bundle.mjs",
+    "policy:anchor": "node src/enforcement/anchor-policy-bundle.mjs",
+    "policy:setup-once": "node src/enforcement/setup-policy-once.mjs",
+    "policy:freeze": "node src/enforcement/set-global-freeze.mjs --freeze",
+    "policy:unfreeze": "node src/enforcement/set-global-freeze.mjs --unfreeze",
+    "setup:admin": "node src/scripts/admin-init.mjs",
+    "setup:runtime": "node src/scripts/setup.mjs",
+    "setup:gateway": "node src/openclaw/gateway.mjs --port=3011",
+    "setup:service": "node src/scripts/setup-service.mjs install",
+    "setup:service:remove": "node src/scripts/setup-service.mjs remove",
+    "setup:service:status": "node src/scripts/setup-service.mjs status",
+    "setup:topup": "node src/scripts/topup-vault.mjs",
+    "setup:all": "node src/scripts/setup-all.mjs",
+    "admin": "node src/scripts/admin-init.mjs",
+    "bootstrap": "node src/scripts/admin-init.mjs",
+    "setup:guided": "node src/scripts/setup-guided.mjs",
+    "setup:friendly": "node src/scripts/setup-guided.mjs",
+    "topup": "node src/scripts/topup-vault.mjs",
+    "uninstall:clawall": "node src/scripts/uninstall-clawall.mjs",
+    "benchmark:redteam": "node src/benchmarks/red-team-pack.mjs",
+    "forensics:bundle": "node src/forensics/bundle.mjs",
+    "gateway": "node src/openclaw/gateway.mjs --port=3011",
+    "openclaw:setup": "node src/scripts/setup-openclaw-plugin.mjs",
+    "setup": "node src/scripts/setup-all.mjs",
+    "security:prove-routing": "node src/scripts/prove-routing.mjs"
   },
   "dependencies": {
     "@mysten/sui": "^2.0.1",
     "@mysten/walrus": "^1.0.1",
     "dotenv": "^16.0.0",
-    "fs": "^0.0.1-security"
+    "zod": "^3.23.8"
   }
 }

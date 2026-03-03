@@ -2,6 +2,9 @@ import { enforceOSPolicy } from './os-policy.mjs';
 import { enforceFSPolicy } from './fs-policy.mjs';
 import { enforceBrowserPolicy } from './browser-policy.mjs';
 import { inspectScriptIntent } from './script-policy.mjs';
+import { deriveIntentProvenance, isUntrustedProvenance } from './provenance.mjs';
+
+const SUI_ADDRESS_RE = /^0x[a-fA-F0-9]{64}$/;
 
 function deny(severity, reason) {
   return { allowed: false, severity, reason };
@@ -27,6 +30,10 @@ function normalize(result, fallbackSeverity = 'MEDIUM') {
   };
 }
 
+function isPositiveInteger(value) {
+  return Number.isInteger(value) && value > 0;
+}
+
 export function inspectIntent(intent) {
   if (!intent || typeof intent !== 'object') {
     return deny('HIGH', 'Intent missing or not an object');
@@ -36,11 +43,13 @@ export function inspectIntent(intent) {
     return deny('HIGH', 'Malformed intent (missing domain or action)');
   }
 
+  const provenance = deriveIntentProvenance(intent);
+
   switch (intent.domain) {
     case 'OS': {
       if (intent.action === 'EXECUTE_COMMAND') {
         return normalize(
-          enforceOSPolicy(intent.params),
+          enforceOSPolicy(intent.params, { provenance }),
           'HIGH'
         );
       }
@@ -48,6 +57,13 @@ export function inspectIntent(intent) {
       if (intent.action === 'DOWNLOAD_AND_EXECUTE') {
         if (!intent.payload) {
           return deny('HIGH', 'Missing script payload');
+        }
+
+        if (isUntrustedProvenance(provenance)) {
+          return deny(
+            'CRITICAL',
+            `Untrusted provenance cannot perform DOWNLOAD_AND_EXECUTE (${provenance.source})`
+          );
         }
 
         return normalize(
@@ -67,6 +83,13 @@ export function inspectIntent(intent) {
     }
 
     case 'BROWSER': {
+      if (isUntrustedProvenance(provenance) && intent.params?.url) {
+        return deny(
+          'HIGH',
+          `Untrusted provenance browser action blocked (${provenance.source})`
+        );
+      }
+
       return normalize(
         enforceBrowserPolicy(intent.params),
         'MEDIUM'
@@ -76,10 +99,18 @@ export function inspectIntent(intent) {
     case 'BLOCKCHAIN': {
       if (
         !intent.params ||
-        typeof intent.params.amount !== 'number' ||
-        !intent.params.recipient
+        !isPositiveInteger(intent.params.amount) ||
+        typeof intent.params.recipient !== 'string' ||
+        !SUI_ADDRESS_RE.test(intent.params.recipient)
       ) {
-        return deny('MEDIUM', 'Malformed blockchain intent parameters');
+        return deny('MEDIUM', 'Malformed blockchain intent parameters (amount/recipient)');
+      }
+
+      if (isUntrustedProvenance(provenance) && intent.params.amount > 0) {
+        return deny(
+          'HIGH',
+          `Blockchain action blocked from untrusted provenance (${provenance.source})`
+        );
       }
 
       return allow('LOW');
@@ -89,4 +120,3 @@ export function inspectIntent(intent) {
       return deny('MEDIUM', `Unknown intent domain: ${intent.domain}`);
   }
 }
-

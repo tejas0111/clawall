@@ -8,8 +8,17 @@ const API     = ENABLED ? `https://api.telegram.org/bot${BOT_TOKEN}` : null;
 
 let freezeAlertSent = false;
 
-function escape(text) {
-  return String(text).replace(/[_*[\]()~`>#+=|{}.!-]/g, '\\$&');
+function block(title, lines = []) {
+  const cleaned = lines.filter((line) => line !== null && line !== undefined && line !== '');
+  return [
+    `CLAWALL | ${title}`,
+    '-----------------------------',
+    ...cleaned,
+  ].join('\n');
+}
+
+function kv(key, value) {
+  return `${String(key).padEnd(16, ' ')} ${value ?? 'n/a'}`;
 }
 
 async function sendTelegram(text) {
@@ -22,7 +31,6 @@ async function sendTelegram(text) {
       body: JSON.stringify({
         chat_id:    CHAT_ID,
         text,
-        parse_mode: 'MarkdownV2',
       }),
     });
 
@@ -30,7 +38,6 @@ async function sendTelegram(text) {
 
     if (!json.ok) {
       console.error('[TG sendMessage error]', json.description);
-      console.error('[TG message text was]', text);
     }
   } catch (err) {
     console.error('[TG fetch error]', err.message);
@@ -52,19 +59,15 @@ export async function sendAlert(payload = {}) {
 
   if (stage === 'KILL_SWITCH') return;
 
-  const text = [
-    `🚨 *AGENT ALERT*`,
-    ``,
-    `*Level:* ${escape(level)}`,
-    `*Domain:* ${escape(domain)}`,
-    `*Stage:* ${escape(stage)}`,
-    ``,
-    `*Message:*`,
-    escape(message),
-    reason ? `\n*Reason:*\n${escape(reason)}` : '',
-    risk    ? `\n*Risk:* ${escape(risk.risk_level)} \\(${escape(String(risk.risk_score))}\\)` : '',
-    intent  ? `\n*Action:* ${escape(intent.action)}` : '',
-  ].filter(line => line !== '').join('\n');
+  const text = block('Security Alert', [
+    kv('Level', level),
+    kv('Domain', domain),
+    kv('Stage', stage),
+    kv('Message', message),
+    reason ? kv('Reason', reason) : null,
+    risk ? kv('Risk', `${risk.risk_level} (score=${risk.risk_score})`) : null,
+    intent ? kv('Action', `${intent.domain} -> ${intent.action}`) : null,
+  ]);
 
   await sendTelegram(text);
 }
@@ -78,18 +81,13 @@ export async function sendFreezeAlert({
 
   freezeAlertSent = true;
 
-  const text = [
-    `🧊 *AGENT FROZEN*`,
-    ``,
-    `🚫 *Status:* GLOBAL FREEZE ENABLED`,
-    `📍 *Source:* ${escape(source)}`,
-    ``,
-    `*Reason:*`,
-    escape(reason),
-    intent ? `\n*Triggered By:*\n${escape(intent.domain)} → ${escape(intent.action)}` : '',
-    ``,
-    `⚠️ All agent actions are now blocked\\.`,
-  ].filter(line => line !== '').join('\n');
+  const text = block('Kill Switch Engaged', [
+    kv('Status', 'GLOBAL FREEZE ENABLED'),
+    kv('Source', source),
+    kv('Reason', reason),
+    intent ? kv('Triggered By', `${intent.domain} -> ${intent.action}`) : null,
+    'All agent actions are now blocked until manual resume.',
+  ]);
 
   await sendTelegram(text);
 }

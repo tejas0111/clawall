@@ -1,0 +1,12 @@
+{
+  "name": "clawall-security",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Real OpenClaw plugin for ClawAll policy engine",
+  "openclaw": {
+    "extensions": [
+      "./index.js"
+    ]
+  }
+}

@@ -3,6 +3,6 @@
   "reason": null,
   "triggered_at": null,
   "expires_at": null,
-  "triggered_by": "RESET_AGENT_STATE",
+  "triggered_by": "DEMO_RECOVERY",
   "last_alert_at": 0
 }

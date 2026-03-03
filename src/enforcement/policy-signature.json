@@ -1,0 +1,22 @@
+{
+  "schema": "clawall/policy-signature-v1",
+  "sha256": "7ac38d4075ba1dcc4bb0b88c45daeaf5371765888d592cfe12525e37d84d1257",
+  "generated_at": "2026-03-02T16:50:44.920Z",
+  "generated_by": "clawall-setup",
+  "files": [
+    "src/orchestrator/intent-orchestrator.mjs",
+    "src/chain/sui-transaction-gateway.mjs",
+    "src/state/kill-switch.mjs",
+    "src/enforcement/intent-firewall.mjs",
+    "src/enforcement/os-policy.mjs",
+    "src/enforcement/fs-policy.mjs",
+    "src/enforcement/browser-policy.mjs",
+    "src/enforcement/script-policy.mjs",
+    "src/enforcement/policy-anchor.mjs",
+    "src/enforcement/prompt-quarantine.mjs",
+    "src/enforcement/provenance.mjs",
+    "src/enforcement/policy-integrity.mjs",
+    "src/risk/policy.mjs",
+    "src/governance/approval.mjs"
+  ]
+}

@@ -19,9 +19,9 @@ export function evaluatePolicy(risk) {
 
     case 'MEDIUM':
       return {
-        action: 'ALLOW',
+        action: 'REQUIRE_APPROVAL',
         alert: true,
-        reason: 'Medium risk allowed with alert',
+        reason: 'Medium risk transaction requires human approval',
       };
 
     case 'LOW':
@@ -39,4 +39,3 @@ export function evaluatePolicy(risk) {
       };
   }
 }
-

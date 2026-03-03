@@ -1,0 +1,28 @@
+{
+  "id": "clawall-security",
+  "name": "ClawAll Security Plugin",
+  "description": "OpenClaw plugin that sends intents through ClawAll gateway security checks.",
+  "version": "0.1.0",
+  "author": "ClawAll",
+  "license": "MIT",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "api_url": {
+        "type": "string",
+        "title": "ClawAll Gateway URL",
+        "description": "Base URL for ClawAll gateway API.",
+        "default": "http://127.0.0.1:3011"
+      },
+      "api_key": {
+        "type": "string",
+        "title": "ClawAll Gateway API Key",
+        "description": "Shared key sent by plugin to gateway for signed transfer authorization."
+      }
+    }
+  },
+  "uiHints": {
+    "category": "security",
+    "tags": ["sui", "openclaw", "guard", "policy"]
+  }
+}

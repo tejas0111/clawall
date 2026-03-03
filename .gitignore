@@ -1,3 +1,12 @@
-node_modules
-build
+node_modules/
+build/
 .env
+*.log
+logs/
+src/state/*.log
+src/state/*.log.*
+src/state/*.bak
+src/state/kill-switch.json
+src/state/agent-persistent-state.json
+src/state/prompt-quarantine.json
+src/state/forensics/

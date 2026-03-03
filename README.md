@@ -1,360 +1,134 @@
-# 🦞 ClawAll
+# ClawAll
 ![ClawAll Header](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/clawall.png)
-### Autonomous AI Constraint & Governance Layer for Sui
 
-> AI agents should not have raw execution power.
-> ClawAll gives them guardrails, enforcement, and human override.
+AI safety firewall and governance runtime for autonomous OpenClaw agents on Sui.
 
----
-
-## 🎥 Demo Video
-
-> **Watch ClawAll intercept a high-risk transfer, trigger Telegram approval, and engage the kill-switch in real time.**
-
-[Download or View Demo Video](https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4)
-
-<video src="https://github.com/user-attachments/assets/981ed620-43d8-4acd-8646-404d6f59c716" controls="controls" style="max-width: 100%;">
-  Your browser does not support the video tag.
-</video>
-
+## 📄 Documentation
+Official Documentation: [clawall.netlify.app/docs.html](https://clawall.netlify.app/docs.html)
 
 ---
 
-## 🚨 Problem
+## Why this project
 
-AI agents executing real blockchain transactions are dangerous. Without constraints they can:
+ClawAll gives an agent powerful local execution while enforcing hard controls that fail closed:
 
-- Drain wallets via rapid micro-transactions
-- Execute destructive OS commands
-- Bypass human intent
-- Escalate privileges cross-domain
-- Execute high-value transfers without oversight
+- **Pre-execution intent firewall** for OS/browser/blockchain actions.
+- **Risk scoring + policy decisions** + human approval for risky transfers.
+- **Policy integrity signature** and on-chain hash anchor verification (STRICT mode).
+- **Multi-coin support** for all assets in the vault (SUI, USDC, WAL, etc.) with verified decimals.
+- **Human-friendly agent responses** using conversational synthesis.
+- **Runtime cap-isolation** checks to prevent policy-admin capability leakage.
+- **On-chain Move constraints** (`max_amount`, recipient binding, expiry).
+- **Walrus audit proof logging** (transaction proposal + OS quilt mirror).
 
-We need a **constraint layer between AI and execution**.
+## Security pipeline
 
----
-
-## 🧠 Solution: ClawAll
-
-ClawAll is a **multi-layer AI enforcement system** that:
-
-- Inspects intent before execution
-- Scores transaction risk
-- Applies policy decisions
-- Requires Telegram approval for high-risk actions
-- Engages persistent kill-switch on OS violations
-- Enforces constraints on-chain using Move smart contracts
-- Emits auditable events to Walrus + Sui
-
----
-
-## 🏗 Architecture
-
-```
-AI Agent
-   ↓
-Intent Firewall
-   ↓
-Risk Engine
-   ↓
-Policy Engine
-   ↓
-Governance (Telegram)
-   ↓
-On-chain Move Enforcement
-   ↓
-Event + Walrus Audit
+```text
+Agent Intent
+  -> Intent Firewall
+  -> Risk Engine
+  -> Policy Engine
+  -> Telegram Governance
+  -> Policy Integrity + Anchor Checks (Strict Sync)
+  -> Move Constraint Execution
+  -> Walrus Audit / OS Quilt
 ```
 
----
+Any layer can block execution.
 
-## 🔐 Core Security Layers
+## Repository map
 
-### 1️⃣ Intent Firewall
+- Runtime orchestrator: `src/orchestrator/intent-orchestrator.mjs`
+- Chain execution gateway: `src/chain/sui-transaction-gateway.mjs`
+- Move module: `chain/sui/sources/enforcer.move`
+- Governance bot: `src/governance/telegram-bot.mjs`
+- Policy integrity + anchor tools: `src/enforcement/`
+- OpenClaw Plugin: `src/plugins/clawall-openclaw-plugin/`
 
-Blocks unsafe domains like:
+## Quickstart (single machine demo)
 
-- `rm -rf`
-- Destructive OS commands
-- Unauthorized domain escalation
-
----
-
-### 2️⃣ Risk Engine
-
-Multi-factor scoring system:
-
-- Relative transfer size
-- Absolute high value
-- Recipient novelty
-- Transaction velocity
-- Cumulative spend
-- Small chunk draining
-- Behavior anomaly
-- Risk compounding
-
-Outputs:
-
-```js
-{
-  risk_score: 82,
-  risk_level: "HIGH",
-  reasoning: "...",
-}
-```
-
----
-
-### 3️⃣ Policy Engine
-
-| Risk Level | Action                 |
-| ---------- | ---------------------- |
-| LOW        | Allow                  |
-| MEDIUM     | Allow + Alert          |
-| HIGH       | Require Human Approval |
-
----
-
-### 4️⃣ Telegram Governance
-
-- `/logs`
-- `/tx <id>`
-- `/freeze`
-- `/resume`
-- `/status`
-- Inline Approve / Reject buttons
-
-High-risk transfers generate:
-
-```
-⚠️ APPROVAL REQUIRED
-[Approve ✅] [Reject ❌]
-```
-
----
-
-### 5️⃣ Kill Switch (Persistent)
-
-Triggered by:
-
-- Critical OS violations
-- Manual Telegram `/freeze`
-
-Stored in file:
-
-```
-kill-switch.json
-```
-
-Even if agent restarts → remains frozen.
-
----
-
-### 6️⃣ On-Chain Enforcement (Move)
-
-Transfer constraints are minted:
-
-```move
-public struct TransferConstraint {
-    max_amount: u64,
-    allowed_recipient: address,
-    expiry_ms: u64,
-}
-```
-
-Execution enforces:
-
-- Max amount
-- Allowed recipient
-- Expiry time
-- Canonical Sui clock
-- Constraint deletion after execution
-
-Emits event:
-
-```move
-TransferExecuted
-```
-
-Which is parsed by Telegram `/logs`.
-
----
-
-## 🔗 On-Chain Audit
-
-Every transfer emits:
-
-- `constraint_id`
-- `amount`
-- `recipient`
-- `timestamp`
-- `Walrus audit blob`
-
-You can view any transaction via:
-
-```
-https://suiscan.xyz/testnet/tx/<TX_DIGEST>
-```
-
----
-
-## 🖥 Interactive Demo Shell
-
-clone repo:
-
-```bash
-git clone https://github.com/tejas0111/clawall
-```
-
-install dependencies:
+1. Install dependencies.
 
 ```bash
 npm install
 ```
-Run:
 
-```bash
-npm run demo
-```
-
-Opens:
-
-```
-clawall>
-```
-
-Options:
-
-```
-1 → Normal transaction
-2 → Medium risk
-3 → High risk (approval)
-4 → OS attack simulation
-5 → Show freeze state
-6 → Reset memory
-0 → Exit
-```
-
-This allows live threat simulation during demo.
-
----
-
-## 🧪 Example Demo Flows
-
-### 🔴 Cross-Domain Containment
-
-```
-4 → OS attack
-1 → Blockchain tx blocked
-/resume in Telegram
-1 → Works again
-```
-
----
-
-### 🟡 Human Governance
-
-```
-3 → High risk
-Approve in Telegram
-→ Transaction executes
-```
-
-or
-
-```
-3 → High risk
-Reject in Telegram
-→ Transaction blocked
-```
-
----
-
-### 🔒 Manual Emergency Freeze
-
-Telegram:
-
-```
-/freeze
-```
-
-Shell:
-
-```
-1 → blocked
-```
-
-Resume:
-
-```
-/resume
-```
-
----
-
-## ⚙️ Environment Variables
-
-Create `.env`:
+2. Configure `.env` (minimum values).
 
 ```env
-PRIVATE_KEY=<your_private_key>
-GUARD_CAP_ID=<your_guard_cap_id>
-RPC_URL=<sui_rpc_url>
-PACKAGE_ID=<deployed_package_id>
+PACKAGE_ID=<sui_package_id>
+RPC_URL=https://fullnode.testnet.sui.io:443
+PRIVATE_KEY=<runtime_or_demo_private_key>
+GUARD_CAP_ID=<guard_cap_object_id>
+FREEZE_STATE_ID=<global_freeze_object_id>
+
 TG_BOT_TOKEN=<telegram_bot_token>
 TG_CHAT_ID=<telegram_chat_id>
+TG_OPERATOR_USERNAMES=@your_username
+
+# Security Modes
+POLICY_INTEGRITY_MODE=strict
+POLICY_ANCHOR_MODE=strict
 ```
 
----
+3. Run secure bootstrap (signs code + syncs environment).
 
-## 🧩 Tech Stack
+```bash
+npm run setup
+```
 
-- **Sui Move** — Smart contract enforcement layer
-- **Sui JSON-RPC** — On-chain transaction execution
-- **Node.js (ESM)** — Agent runtime
-- **Telegram Bot API** — Human governance interface
-- **Walrus** — Decentralized audit blob storage
-- **Custom Risk Engine** — Multi-factor behavioral scoring
+4. Start gateway.
 
----
+```bash
+npm run gateway
+```
 
-## 🛡 Why This Matters
+## Operator command reference
 
-ClawAll proves that:
+### Core scripts
 
-> AI agents can operate autonomously
-> without sacrificing safety, auditability, and human control.
+- `npm run demo` -> interactive shell demo.
+- `npm test` -> automated security tests.
+- `npm run policy:sign` -> updates policy signature bundle.
+- `npm run policy:anchor` -> syncs local signature to on-chain anchor.
+- `npm run admin` -> interactive vault and capability manager.
+- `npm run forensics:bundle` -> generate incident forensics package.
 
-This is not just wallet protection. This is:
+### Demo shell menu
 
-- **AI governance** — policy-driven execution decisions
-- **Constraint-based execution** — on-chain enforced limits
-- **Cross-domain enforcement** — OS violations freeze blockchain actions
-- **Persistent safety layer** — survives agent restarts
+```text
+1  -> Normal Transaction (Low Risk)
+2  -> Medium Risk Transaction (Approval Required)
+3  -> High Risk Transaction (Approval Required)
+4  -> Simulate OS Attack (Kill Switch)
+9  -> Simulate Policy Tamper (Integrity Block)
+```
 
----
+## OpenClaw Integration
 
-## 🏆 Clawall Value
+ClawAll includes a production-ready OpenClaw plugin:
 
-What makes this project strong:
+```bash
+openclaw plugins install ./src/plugins/clawall-openclaw-plugin
+```
 
-- ✅ Real on-chain enforcement
-- ✅ Real transactions on Sui testnet
-- ✅ Persistent kill-switch (survives restarts)
-- ✅ Human-in-the-loop governance via Telegram
-- ✅ Cross-domain containment (OS → Blockchain freeze)
-- ✅ Multi-factor risk scoring engine
-- ✅ Full auditable execution trail (Walrus + Sui events)
+Plugin features:
+- **Natural Language Parsing:** "send 0.01 sui to 0x..." works out of the box.
+- **Human-in-the-loop:** Prompts for approval via Telegram for high-risk actions.
+- **Conversational Responses:** The agent responds naturally with transaction details and explorer links.
+- **Multi-token Awareness:** Automatically handles decimals and pricing for vault assets.
 
----
+## Production-style split custody (Security Mandate)
 
-## 📌 Future Roadmap
+Use two wallets/sessions:
+- **Runtime Agent:** Owns `GuardCap` and `GlobalFreeze` access only.
+- **Policy Admin:** Owns `PolicyAdminCap` (Master key).
 
-- Multi-sig governance
-- DAO-based approval
-- Behavior ML anomaly detection
-- Production wallet plugin
-- zk-risk proofs
-- Agent identity attestation
+This ensures the agent cannot rewrite its own security policy even if the runtime host is compromised.
 
+## Current limitations
 
+- Telegram is a centralized approval transport.
+- Audit availability depends on Walrus/RPC health; execution blocks when audit write fails.
+
+These are explicit design tradeoffs for security-first fail-closed behavior.

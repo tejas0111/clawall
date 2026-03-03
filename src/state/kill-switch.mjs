@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { logSecurityEvent } from '../observability/security-events.mjs';
 
 const FILE = 'src/state/kill-switch.json';
 
@@ -33,6 +34,10 @@ export function isFrozen() {
     Date.now() > state.expires_at
   ) {
     unfreeze('AUTO_EXPIRE');
+    logSecurityEvent('kill_switch.auto_expire', {
+      reason: state.reason ?? 'expired',
+      triggered_by: state.triggered_by ?? null,
+    });
     return false;
   }
 
@@ -52,16 +57,31 @@ export function freeze({ reason, by, durationMs = null }) {
   };
 
   save(state);
+  logSecurityEvent('kill_switch.freeze', {
+    reason: reason ?? null,
+    triggered_by: by ?? null,
+    duration_ms: durationMs ?? null,
+  });
   return state;
 }
 
 export function unfreeze(by = 'MANUAL') {
-  const state = {
-    ...DEFAULT,
-    triggered_by: by,
-  };
+  const existing = load();
+  if (!existing.frozen) {
+    // Avoid noisy duplicate unfreeze logs when multiple subsystems attempt to
+    // restore state (e.g. governance resume + agent reset).
+    if (existing.triggered_by === by) return existing;
+    const updated = {
+      ...existing,
+      triggered_by: by,
+    };
+    save(updated);
+    return updated;
+  }
 
+  const state = { ...DEFAULT, triggered_by: by };
   save(state);
+  logSecurityEvent('kill_switch.unfreeze', { triggered_by: by });
   return state;
 }
 
@@ -81,4 +101,3 @@ export function shouldAlert(cooldownMs = 60_000) {
   save(state);
   return true;
 }
-

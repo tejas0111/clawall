@@ -1,0 +1,34 @@
+{
+  "schema": "clawall/red-team-benchmark-v1",
+  "generated_at": "2026-02-24T16:42:22.908Z",
+  "malicious": {
+    "total": 120,
+    "blocked": 120,
+    "allowed": 0,
+    "blocked_rate": 1
+  },
+  "benign": {
+    "total": 10,
+    "blocked": 0,
+    "allowed": 10,
+    "blocked_rate": 0,
+    "allowed_rate": 1,
+    "false_positive_rate": 0
+  },
+  "reason_histogram": {
+    "Unsafe characters in command arguments": 25,
+    "Blocked command: sudo": 5,
+    "Blocked command: chmod": 5,
+    "Blocked command: dd": 5,
+    "Command not allow-listed: mkfs.ext4": 5,
+    "Untrusted provenance cannot run command: curl": 25,
+    "Untrusted provenance cannot run command: wget": 10,
+    "Shell operator blocked: ;": 5,
+    "Shell operator blocked: &&": 5,
+    "Untrusted provenance cannot run command: cat": 5,
+    "Blocked command: scp": 5,
+    "Blocked command: nc": 5,
+    "Blocked command: ssh": 5,
+    "Command substitution blocked": 10
+  }
+}
