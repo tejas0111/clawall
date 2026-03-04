@@ -5,11 +5,11 @@ It enforces policy decisions before execution and applies on-chain constraints t
 
 ## Project Links
 
-- Repository: <a href="https://github.com/tejas0111/clawall" target="_blank" rel="noopener noreferrer">https://github.com/tejas0111/clawall</a>
-- Documentation: <a href="https://clawall.netlify.app/docs.html" target="_blank" rel="noopener noreferrer">https://clawall.netlify.app/docs.html</a>
-- Demo: <a href="https://clawall.netlify.app/#demo-video" target="_blank" rel="noopener noreferrer">https://clawall.netlify.app/#demo-video</a>
-- Setup: <a href="https://clawall.netlify.app/#setup-video" target="_blank" rel="noopener noreferrer">https://clawall.netlify.app/#setup-video</a>
-- Architecture Diagram: <a href="https://clawall.netlify.app/assets/diagrams/architecture-main.svg" target="_blank" rel="noopener noreferrer">https://clawall.netlify.app/assets/diagrams/architecture-main.svg</a>
+- Repository: [https://github.com/tejas0111/clawall](https://github.com/tejas0111/clawall)
+- Documentation: [https://clawall.netlify.app/docs.html](https://clawall.netlify.app/docs.html)
+- Demo: [https://clawall.netlify.app/#demo-video](https://clawall.netlify.app/#demo-video)
+- Setup: [https://clawall.netlify.app/#setup-video](https://clawall.netlify.app/#setup-video)
+- Architecture Diagram: [https://clawall.netlify.app/assets/diagrams/architecture-main.svg](https://clawall.netlify.app/assets/diagrams/architecture-main.svg)
 
 ## Core Capabilities
 
