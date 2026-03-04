@@ -414,6 +414,18 @@ function normalizeTransferReason(reason) {
   const text = String(reason || '').trim();
   const lower = text.toLowerCase();
   if (!text) return 'Policy decision';
+  if (lower.includes('gov_tg_config_missing')) {
+    return 'Telegram approval is required but not configured. Set TG_BOT_TOKEN and TG_CHAT_ID, then retry.';
+  }
+  if (lower.includes('gov_approval_timeout')) {
+    return 'Governance approval timed out before operator response. Retry and approve in Telegram within timeout window.';
+  }
+  if (lower.includes('gov_approval_rejected')) {
+    return text.replace(/^GOV_APPROVAL_REJECTED:\s*/i, 'Governance rejected this transfer: ');
+  }
+  if (lower.includes('audit_walrus_upload_failed') || lower.includes('audit_walrus_blob_empty')) {
+    return 'Walrus audit upload failed; transfer blocked by audit gate. Check WALRUS_UPLOAD_RELAY/RPC/network and signer gas.';
+  }
   if (
     lower.includes('commandargumenterror') &&
     lower.includes('arg_idx: 3') &&

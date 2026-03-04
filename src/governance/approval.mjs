@@ -10,6 +10,8 @@ const APPROVAL_TIMEOUT_MS = Number.isFinite(
 )
   ? Number(process.env.APPROVAL_TIMEOUT_MS)
   : 60_000;
+const TG_BOT_TOKEN = String(process.env.TG_BOT_TOKEN || '').trim();
+const TG_CHAT_ID = String(process.env.TG_CHAT_ID || '').trim();
 
 function shortTokenHex(sizeBytes = 4) {
   return crypto.randomBytes(sizeBytes).toString('hex');
@@ -52,7 +54,14 @@ export async function requestApproval({ proposal, risk }) {
   if (!proposal || !risk) {
     return {
       approved: false,
-      reason: 'Missing proposal or risk',
+      reason: 'GOV_INPUT_INVALID: Missing proposal or risk for approval request.',
+    };
+  }
+  if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
+    return {
+      approved: false,
+      reason:
+        'GOV_TG_CONFIG_MISSING: TG_BOT_TOKEN/TG_CHAT_ID not set, so REQUIRE_APPROVAL transactions cannot be approved.',
     };
   }
 
@@ -85,7 +94,9 @@ export async function requestApproval({ proposal, risk }) {
     if (!decision?.approved) {
       return {
         approved: false,
-        reason: decision?.reason ?? 'Approval denied or timed out',
+        reason:
+          decision?.reason ??
+          'GOV_APPROVAL_DENIED: Approval not granted (rejected or timed out).',
       };
     }
 
@@ -93,7 +104,7 @@ export async function requestApproval({ proposal, risk }) {
   } catch (err) {
     return {
       approved: false,
-      reason: err?.message ?? 'Approval system failure',
+      reason: `GOV_APPROVAL_SYSTEM_FAILURE: ${err?.message ?? 'unknown error'}`,
     };
   }
 }

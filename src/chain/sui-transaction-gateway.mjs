@@ -62,15 +62,25 @@ export async function mintAndExecute({ signer, guardCapId, freezeStateId, vaultI
   try {
     console.log('[audit] submitting proposal to Walrus...');
     finalBlobId = await logProposal({ proposal, risk, constraint, signer });
-    if (!finalBlobId) throw new Error('Walrus returned empty blob ID');
+    if (!finalBlobId) {
+      throw new Error(
+        'AUDIT_WALRUS_BLOB_EMPTY: Walrus returned an empty blob id (upload failed or signer execution failed).'
+      );
+    }
     console.log(`[audit] anchor: ${finalBlobId}`);
   } catch (err) {
+    const detail = String(err?.message ?? err);
+    const reason = [
+      `AUDIT_WALRUS_UPLOAD_FAILED: ${detail}`,
+      'Transfer blocked to preserve mandatory audit integrity.',
+      'Check WALRUS_UPLOAD_RELAY/RPC_URL connectivity and signer gas balance.',
+    ].join(' ');
     console.error('[audit] CRITICAL: Audit logging failed. Blocking transaction for safety.', err.message);
     return { 
       ok: false, 
       decision: 'BLOCKED', 
       layer: 'AUDIT', 
-      reason: `Audit submission failed: ${err.message}. Transaction aborted for safety.` 
+      reason,
     };
   }
 

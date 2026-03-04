@@ -234,7 +234,18 @@ export async function processIntent(intent, context = {}) {
   if (policy.action === 'REQUIRE_APPROVAL') {
     const approval = await requestApproval({ proposal: executionIntent, risk });
     if (!approval?.approved) {
-      return finalizeDecision(intent, { ok: false, decision: 'BLOCKED', layer: 'GOVERNANCE', reason: 'Approval denied or timed out' }, risk);
+      return finalizeDecision(
+        intent,
+        {
+          ok: false,
+          decision: 'BLOCKED',
+          layer: 'GOVERNANCE',
+          reason:
+            approval?.reason ??
+            'GOV_APPROVAL_DENIED: Approval not granted (rejected or timed out).',
+        },
+        risk
+      );
     }
   }
 

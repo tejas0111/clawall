@@ -539,7 +539,11 @@ export function waitForApproval({
   oneTimeToken,
 }) {
   if (!ENABLED) {
-    return Promise.resolve({ approved: false });
+    return Promise.resolve({
+      approved: false,
+      reason:
+        'GOV_TG_CONFIG_MISSING: Telegram approvals are disabled because TG_BOT_TOKEN or TG_CHAT_ID is not configured.',
+    });
   }
 
   const approvalDigestShort = shortDigest(approvalDigest, 8) || null;
@@ -556,7 +560,10 @@ export function waitForApproval({
         approval_digest: approvalDigestShort,
         approval_token: oneTimeTokenShort,
       });
-      resolve({ approved: false, reason: 'timeout' });
+      resolve({
+        approved: false,
+        reason: `GOV_APPROVAL_TIMEOUT: No operator approval received within ${timeoutMs}ms.`,
+      });
     }, timeoutMs);
 
     state.pendingApprovals.set(proposalId, {
@@ -658,7 +665,13 @@ function resolveApproval({
     approval_digest: approvalDigest ?? null,
     approval_token: entry.oneTimeToken ?? null,
   });
-  entry.resolve({ approved, approvedBy });
+  entry.resolve({
+    approved,
+    approvedBy,
+    reason: approved
+      ? 'GOV_APPROVAL_GRANTED'
+      : `GOV_APPROVAL_REJECTED: Rejected by ${approvedBy || 'operator'}.`,
+  });
   return { ok: true, code: approved ? 'APPROVED' : 'REJECTED' };
 }
 
