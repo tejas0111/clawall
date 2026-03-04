@@ -265,7 +265,7 @@ async function mediumRiskTx() {
   const required = 0.152;
   if (Number.isFinite(balance) && balance < required) {
     console.log(`Insufficient SUI vault balance for true MEDIUM threshold demo (${balance} SUI available, >= ${required} SUI recommended).`);
-    console.log('Top up vault via `npm run admin` and retry option 2.');
+    console.log('Top up vault via `npm run topup` and retry option 2.');
     return;
   }
   console.log('Check Telegram for medium-risk approval.');
@@ -279,7 +279,7 @@ async function highRiskTx() {
   const required = 0.352;
   if (Number.isFinite(balance) && balance < required) {
     console.log(`Insufficient SUI vault balance for true HIGH threshold demo (${balance} SUI available, >= ${required} SUI recommended).`);
-    console.log('Top up vault via `npm run admin` and retry option 3.');
+    console.log('Top up vault via `npm run topup` and retry option 3.');
     return;
   }
   console.log('Check Telegram for high-risk approval popup.');

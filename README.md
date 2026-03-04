@@ -1,51 +1,59 @@
 # ClawAll
-![ClawAll Header](src/demos/clawall.png)
 
-AI safety firewall and governance runtime for autonomous OpenClaw agents on Sui.
+ClawAll is a security and governance runtime for autonomous OpenClaw agents on Sui.  
+It enforces policy decisions before execution and applies on-chain constraints to reduce fund-drain and privilege-escalation risk.
 
-## 📄 Documentation
-Official Documentation: [clawall.netlify.app/docs.html](https://clawall.netlify.app/docs.html)
+## Project Links
 
----
+- Repository: https://github.com/tejas0111/clawall
+- Documentation: https://clawall.netlify.app/docs.html
+- Demo: https://clawall.netlify.app/#demo-video
+- Setup: https://clawall.netlify.app/#setup-video
+- Architecture Diagram: https://clawall.netlify.app/assets/diagrams/architecture-main.svg
 
-## Why this project
+## Core Capabilities
 
-ClawAll gives an agent powerful local execution while enforcing hard controls that fail closed:
+- Intent firewall for OS, browser, and blockchain actions.
+- Risk engine with policy outcomes (`ALLOW`, `BLOCK`, `REQUIRE_APPROVAL`).
+- Governance approval gate for risky operations.
+- Policy integrity checks and optional on-chain policy anchor verification.
+- Move-level transfer constraints and freeze controls on Sui.
+- Audit-first execution with Walrus logging.
+- OpenClaw plugin support for command and NL-driven workflows.
 
-- **Pre-execution intent firewall** for OS/browser/blockchain actions.
-- **Risk scoring + policy decisions** + human approval for risky transfers.
-- **Policy integrity signature** and on-chain hash anchor verification (STRICT mode).
-- **Multi-coin support** for all assets in the vault (SUI, USDC, WAL, etc.) with verified decimals.
-- **Human-friendly agent responses** using conversational synthesis.
-- **Runtime cap-isolation** checks to prevent policy-admin capability leakage.
-- **On-chain Move constraints** (`max_amount`, recipient binding, expiry).
-- **Walrus audit proof logging** (transaction proposal + OS quilt mirror).
-
-## Security pipeline
+## Architecture Summary
 
 ```text
-Agent Intent
+Intent
   -> Intent Firewall
   -> Risk Engine
   -> Policy Engine
-  -> Telegram Governance
-  -> Policy Integrity + Anchor Checks (Strict Sync)
-  -> Move Constraint Execution
-  -> Walrus Audit / OS Quilt
+  -> Governance Approval
+  -> Integrity/Anchor Verification
+  -> On-Chain Constraint Execution
+  -> Audit Logging
 ```
 
-Any layer can block execution.
+## Repository Structure
 
-## Repository map
+- `src/orchestrator/` - intent orchestration and runtime pipeline
+- `src/chain/` - Sui transaction gateway and chain interactions
+- `chain/sui/sources/` - Move enforcement contracts
+- `src/governance/` - governance bot and approval handlers
+- `src/enforcement/` - policy integrity and anchor tooling
+- `src/plugins/clawall-openclaw-plugin/` - OpenClaw plugin integration
+- `src/openclaw/dashboard-local.mjs` - local dashboard server/proxy
+- `src/local/dashboard/dashboard.html` - local dashboard UI
 
-- Runtime orchestrator: `src/orchestrator/intent-orchestrator.mjs`
-- Chain execution gateway: `src/chain/sui-transaction-gateway.mjs`
-- Move module: `chain/sui/sources/enforcer.move`
-- Governance bot: `src/governance/telegram-bot.mjs`
-- Policy integrity + anchor tools: `src/enforcement/`
-- OpenClaw Plugin: `src/plugins/clawall-openclaw-plugin/`
+## Prerequisites
 
-## Quickstart (single machine demo)
+- Node.js 20+
+- npm
+- Sui CLI
+- OpenClaw CLI/runtime
+- Testnet-funded wallets for setup and runtime testing
+
+## Quick Start
 
 1. Install dependencies.
 
@@ -53,82 +61,51 @@ Any layer can block execution.
 npm install
 ```
 
-2. Configure `.env` (minimum values).
+2. Configure `.env` (minimum required variables).
 
 ```env
 PACKAGE_ID=<sui_package_id>
 RPC_URL=https://fullnode.testnet.sui.io:443
-PRIVATE_KEY=<runtime_or_demo_private_key>
-GUARD_CAP_ID=<guard_cap_object_id>
-FREEZE_STATE_ID=<global_freeze_object_id>
-
-TG_BOT_TOKEN=<telegram_bot_token>
-TG_CHAT_ID=<telegram_chat_id>
-TG_OPERATOR_USERNAMES=@your_username
-
-# Security Modes
+PRIVATE_KEY=<runtime_private_key>
+GUARD_CAP_ID=<guard_cap_id>
+FREEZE_STATE_ID=<freeze_state_id>
+CLAWALL_PLUGIN_KEY=<plugin_key>
+CLAWALL_ENFORCE_PLUGIN_GATE=1
 POLICY_INTEGRITY_MODE=strict
 POLICY_ANCHOR_MODE=strict
+POLICY_CAP_ID=
 ```
 
-3. Run secure bootstrap (signs code + syncs environment).
+3. Run setup.
 
 ```bash
 npm run setup
 ```
 
-4. Start gateway.
+4. Start runtime services.
 
 ```bash
-npm run gateway
+npm run dashboard
 ```
 
-## Operator command reference
+## Common Commands
 
-### Core scripts
+- `npm run gateway` - start ClawAll gateway
+- `npm run dashboard` - start local dashboard
+- `npm run demo` - run interactive demo shell
+- `npm run setup` - full all-in-one setup
+- `npm run topup` - vault top-up flow
+- `npm test` - run test suite
+- `npm run forensics:bundle` - generate forensics bundle
 
-- `npm run demo` -> interactive shell demo.
-- `npm test` -> automated security tests.
-- `npm run policy:sign` -> updates policy signature bundle.
-- `npm run policy:anchor` -> syncs local signature to on-chain anchor.
-- `npm run admin` -> interactive vault and capability manager.
-- `npm run forensics:bundle` -> generate incident forensics package.
+## Security Model
 
-### Demo shell menu
+- Split-custody is required:
+  - Runtime authority for operations (`GuardCap` path).
+  - Separate admin authority for policy/governance updates.
+- Runtime must not hold policy admin capability.
+- Fail-closed behavior is expected when integrity, anchor, audit, or freeze checks fail.
 
-```text
-1  -> Normal Transaction (Low Risk)
-2  -> Medium Risk Transaction (Approval Required)
-3  -> High Risk Transaction (Approval Required)
-4  -> Simulate OS Attack (Kill Switch)
-9  -> Simulate Policy Tamper (Integrity Block)
-```
+## License
 
-## OpenClaw Integration
-
-ClawAll includes a production-ready OpenClaw plugin:
-
-```bash
-openclaw plugins install ./src/plugins/clawall-openclaw-plugin
-```
-
-Plugin features:
-- **Natural Language Parsing:** "send 0.01 sui to 0x..." works out of the box.
-- **Human-in-the-loop:** Prompts for approval via Telegram for high-risk actions.
-- **Conversational Responses:** The agent responds naturally with transaction details and explorer links.
-- **Multi-token Awareness:** Automatically handles decimals and pricing for vault assets.
-
-## Production-style split custody (Security Mandate)
-
-Use two wallets/sessions:
-- **Runtime Agent:** Owns `GuardCap` and `GlobalFreeze` access only.
-- **Policy Admin:** Owns `PolicyAdminCap` (Master key).
-
-This ensures the agent cannot rewrite its own security policy even if the runtime host is compromised.
-
-## Current limitations
-
-- Telegram is a centralized approval transport.
-- Audit availability depends on Walrus/RPC health; execution blocks when audit write fails.
-
-These are explicit design tradeoffs for security-first fail-closed behavior.
+See repository license and project terms in source control.

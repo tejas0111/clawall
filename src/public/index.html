@@ -126,6 +126,68 @@
       color: var(--white) !important;
     }
 
+    .nav-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 38px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(15,17,23,0.6);
+      color: var(--light);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .nav-toggle:hover {
+      border-color: var(--dim);
+      background: rgba(15,17,23,0.9);
+    }
+    .nav-toggle svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+    .nav-drawer {
+      position: fixed;
+      top: 64px;
+      right: 16px;
+      left: 16px;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      padding: 14px;
+      background: rgba(10,12,16,0.95);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.55);
+      z-index: 101;
+    }
+    .nav-drawer.open { display: flex; }
+    .nav-drawer-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid rgba(30,35,48,0.8);
+      background: rgba(15,17,23,0.6);
+      color: var(--light);
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .nav-drawer-link:hover {
+      border-color: var(--dim);
+      background: rgba(15,17,23,0.9);
+    }
+
     /* ── HERO ── */
     .hero {
       min-height: 100vh;
@@ -280,74 +342,62 @@
       transform: translateY(-1px);
     }
 
-    /* ── TERMINAL ── */
-    .terminal-wrap {
-      max-width: 900px;
-      margin: 0 auto 120px;
+    .demo-shell {
+      max-width: 1100px;
+      margin: 0 auto 90px;
       padding: 0 40px;
-      animation: fadeInUp 0.8s 0.5s ease both;
     }
-
-    .terminal {
-      background: var(--panel);
+    .demo-shell-card {
       border: 1px solid var(--border);
+      background: var(--panel);
       border-radius: 8px;
       overflow: hidden;
     }
-
-    .terminal-bar {
+    .demo-shell-head {
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 8px;
       padding: 12px 16px;
       background: var(--dark);
       border-bottom: 1px solid var(--border);
     }
-
-    .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot-r { background: #ff5f57; }
-    .dot-y { background: #febc2e; }
-    .dot-g { background: #28c840; }
-
-    .terminal-title {
-      flex: 1;
-      text-align: center;
-      font-size: 0.7rem;
+    .demo-shell-head strong {
+      color: var(--light);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .demo-shell-head span {
       color: var(--muted);
-      letter-spacing: 0.06em;
+      font-size: 0.7rem;
     }
-
-    .terminal-body {
-      padding: 24px;
-      font-size: 0.8rem;
-      line-height: 1.9;
-      max-height: 440px;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: var(--dim) transparent;
+    .demo-shell-body {
+      padding: 18px 20px;
+      background: #0b0e13;
     }
-
-    .t-comment { color: var(--dim); font-style: italic; }
-    .t-prompt   { color: var(--accent); }
-    .t-cmd      { color: var(--white); }
-    .t-out      { color: var(--green); }
-    .t-warn     { color: var(--yellow); }
-    .t-err      { color: var(--red); }
-    .t-info     { color: var(--cyan); }
-    .t-dim      { color: var(--muted); }
-    .t-light    { color: var(--light); font-weight: 600; }
-
-    .t-line { display: block; }
-
-    .cursor {
-      display: inline-block;
-      width: 8px; height: 14px;
-      background: var(--accent);
-      vertical-align: middle;
-      animation: blink 1s step-end infinite;
+    .demo-shell-line {
+      font-size: 0.72rem;
+      line-height: 1.75;
+      color: var(--body);
+      font-family: 'JetBrains Mono', monospace;
     }
-
-    @keyframes blink { 50% { opacity: 0; } }
+    .shell-prompt { color: var(--accent); }
+    .shell-cmd { color: var(--white); }
+    .shell-out { color: var(--green); }
+    .shell-note { color: var(--cyan); }
+    .shell-dim { color: var(--muted); }
+    .shell-err { color: var(--red); }
+    .shell-warn { color: var(--yellow); }
+    .shell-gap { margin-top: 6px; }
+    .shell-gap-lg { margin-top: 12px; }
+    .demo-shell-foot {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      background: rgba(255,69,0,0.06);
+      color: var(--light);
+      font-size: 0.7rem;
+    }
 
     /* ── SECTION ── */
     section {
@@ -634,6 +684,27 @@
       border-radius: 8px;
       overflow: hidden;
     }
+    .video-block {
+      margin-top: 20px;
+    }
+    .video-block + .video-block {
+      margin-top: 34px;
+      padding-top: 26px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+    .video-block-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+    .video-block-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 12px;
+      max-width: 760px;
+    }
 
     .video-bar {
       display: flex;
@@ -642,6 +713,22 @@
       padding: 12px 16px;
       background: var(--dark);
       border-bottom: 1px solid var(--border);
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      border: 1px solid rgba(0, 0, 0, 0.25);
+    }
+    .dot-r { background: #ff5f56; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #27c93f; }
+    .terminal-title {
+      margin-left: 6px;
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      color: var(--muted);
     }
 
     .video-inner {
@@ -771,6 +858,18 @@
       font-size: 0.8rem;
       line-height: 2;
     }
+    .t-prompt { color: var(--accent); }
+    .t-cmd { color: var(--white); }
+    .t-out { color: var(--green); }
+    .t-dim { color: var(--muted); }
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--accent);
+      vertical-align: text-bottom;
+      animation: blink 1s steps(1, end) infinite;
+    }
 
     /* ── ROADMAP ── */
     .roadmap-list {
@@ -803,7 +902,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: gap;
+      flex-wrap: wrap;
+      gap: 12px;
       max-width: 1100px;
       margin: 0 auto;
     }
@@ -846,6 +946,10 @@
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
 
     .reveal {
       opacity: 0;
@@ -860,12 +964,44 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 700px) {
-      nav { padding: 14px 20px; }
+      nav {
+        padding: 14px 16px;
+      }
       .nav-links { display: none; }
-      .hero { padding: 100px 20px 60px; }
+      .nav-toggle { display: inline-flex; }
+      .nav-github {
+        display: none;
+      }
+      .hero { padding: 130px 20px 60px; }
+      .hero-tagline {
+        margin-bottom: 32px;
+      }
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
       section { padding: 60px 20px; }
-      .terminal-wrap { padding: 0 20px; }
+      .demo-shell { padding: 0 20px; margin-bottom: 60px; }
       .arch-wrap { grid-template-columns: 1fr; }
+      .stack-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .stack-name {
+        min-width: 0;
+      }
+      .install-code {
+        font-size: 0.74rem;
+        line-height: 1.8;
+      }
+      .policy-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .policy-table {
+        min-width: 560px;
+      }
       footer { flex-direction: column; gap: 20px; text-align: center; }
     }
   </style>
@@ -874,19 +1010,38 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">🦞 <span>Claw</span>All</a>
+  <a href="#" class="nav-logo"><span>Claw</span>All</a>
+
+  <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h16"/>
+      <path d="M4 12h16"/>
+      <path d="M4 17h16"/>
+    </svg>
+  </button>
+
   <ul class="nav-links">
     <li><a href="#architecture">Architecture</a></li>
-    <li><a href="#layers">Layers</a></li>
+    <li><a href="#layers">Security</a></li>
     <li><a href="#demo">Demo</a></li>
     <li><a href="#install">Install</a></li>
+    <li><a href="./docs.html">Docs</a></li>
     <li>
-      <a href="https://github.com/tejas0111/clawall" target="_blank" class="nav-github">
+      <a href="https://github.com/tejas0111/clawall" target="_blank" rel="noopener noreferrer" class="nav-github">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
         GitHub
       </a>
     </li>
   </ul>
+
+  <div id="navMenu" class="nav-drawer" aria-hidden="true">
+    <a href="#architecture" class="nav-drawer-link">Architecture</a>
+    <a href="#layers" class="nav-drawer-link">Security</a>
+    <a href="#demo" class="nav-drawer-link">Demo</a>
+    <a href="#install" class="nav-drawer-link">Install</a>
+    <a href="./docs.html" class="nav-drawer-link">Docs</a>
+    <a href="https://github.com/tejas0111/clawall" target="_blank" rel="noopener noreferrer" class="nav-drawer-link">GitHub</a>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -901,38 +1056,43 @@
     <h1 class="hero-title">
       <span class="claw">Claw</span><span class="all">All</span>
     </h1>
-    <p class="hero-sub">Autonomous AI Constraint & Governance Layer for Sui</p>
+    <p class="hero-sub">Constraint, Governance, and Audit Layer for OpenClaw on Sui</p>
     <p class="hero-tagline">
-      AI agents should not have raw execution power.<br />
-      <em>ClawAll gives them guardrails, enforcement, and human override.</em>
+      Autonomous agents should not hold unrestricted execution power.<br />
+      <em>ClawAll enforces policy checks, operator governance, and on-chain safety constraints.</em>
     </p>
     <div class="hero-actions">
-      <a href="https://github.com/tejas0111/clawall" target="_blank" class="btn btn-primary">
+      <a href="https://github.com/tejas0111/clawall" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
         View on GitHub
       </a>
-      <a href="#demo" class="btn btn-outline">
-        ▶ Watch Demo
-      </a>
-      <a href="#install" class="btn btn-outline">
-        $ npm run demo
-      </a>
+      <a href="#demo" class="btn btn-outline">Watch Demo</a>
+      <a href="#install" class="btn btn-outline">$ npm run setup</a>
     </div>
   </div>
 </section>
 
-<!-- TERMINAL -->
-<div class="terminal-wrap reveal">
-  <div class="terminal">
-    <div class="terminal-bar">
-      <span class="dot dot-r"></span>
-      <span class="dot dot-y"></span>
-      <span class="dot dot-g"></span>
-      <span class="terminal-title">clawall — demo shell</span>
+<div class="demo-shell reveal">
+  <div class="demo-shell-card">
+    <div class="demo-shell-head">
+      <strong>Demo Shell</strong>
+      <span>current runtime flow</span>
     </div>
-    <div class="terminal-body" id="mainTerminal">
-      <!-- lines injected by typewriter JS -->
+    <div class="demo-shell-body">
+      <div class="demo-shell-line"><span class="shell-prompt">$</span> <span class="shell-cmd">npm run gateway</span></div>
+      <div class="demo-shell-line shell-out">[clawall-gateway] listening on http://127.0.0.1:3011</div>
+      <div class="demo-shell-line shell-out">[clawall-gateway] transfer gate: enforced=true key_configured=true</div>
+      <div class="demo-shell-line shell-gap"><span class="shell-prompt">$</span> <span class="shell-cmd">npm run setup</span></div>
+      <div class="demo-shell-line shell-note">Bootstrap and runtime refresh complete</div>
+      <div class="demo-shell-line shell-gap"><span class="shell-prompt">$</span> <span class="shell-cmd">openclaw clawall status</span></div>
+      <div class="demo-shell-line shell-dim">kill_switch=frozen:false policy_gate=enabled source=plugin</div>
+      <div class="demo-shell-line shell-gap"><span class="shell-prompt">$</span> <span class="shell-cmd">openclaw clawall transfer --amount 10000000 --recipient 0x...</span></div>
+      <div class="demo-shell-line shell-warn">risk=MEDIUM approval=required</div>
+      <div class="demo-shell-line shell-gap"><span class="shell-prompt">$</span> <span class="shell-cmd">openclaw clawall tx --limit 3</span></div>
+      <div class="demo-shell-line shell-out">digest=D6gKSC...jfAS status=EXECUTED layer=CHAIN</div>
+      <div class="demo-shell-line shell-err">digest=-- status=BLOCKED layer=RISK_ENGINE</div>
     </div>
+    <div class="demo-shell-foot">Local dashboard exists for operators only. Use docs section "Local Dashboard" for setup.</div>
   </div>
 </div>
 
@@ -945,32 +1105,32 @@
 
   <div class="problem-grid reveal">
     <div class="problem-card">
-      <div class="problem-icon">💸</div>
+      <div class="problem-icon">01</div>
       <div class="problem-title">Wallet Drain</div>
       <div class="problem-desc">Rapid micro-transactions bypass manual review, draining funds before anyone notices.</div>
     </div>
     <div class="problem-card">
-      <div class="problem-icon">💣</div>
+      <div class="problem-icon">02</div>
       <div class="problem-title">Destructive OS Commands</div>
       <div class="problem-desc">Unconstrained agents can execute <code>rm -rf</code> and other irreversible system commands.</div>
     </div>
     <div class="problem-card">
-      <div class="problem-icon">🔓</div>
+      <div class="problem-icon">03</div>
       <div class="problem-title">Privilege Escalation</div>
       <div class="problem-desc">Cross-domain actions let agents bootstrap elevated access through chained operations.</div>
     </div>
     <div class="problem-card">
-      <div class="problem-icon">👻</div>
+      <div class="problem-icon">04</div>
       <div class="problem-title">No Audit Trail</div>
       <div class="problem-desc">Without enforcement events, there's no record of what an agent did or why.</div>
     </div>
     <div class="problem-card">
-      <div class="problem-icon">🧠</div>
+      <div class="problem-icon">05</div>
       <div class="problem-title">Bypassed Human Intent</div>
       <div class="problem-desc">Agents optimizing for a goal can take paths that violate user intent — legally and technically.</div>
     </div>
     <div class="problem-card">
-      <div class="problem-icon">🚫</div>
+      <div class="problem-icon">06</div>
       <div class="problem-title">No Override Mechanism</div>
       <div class="problem-desc">Once an agent is running, there's no reliable way to stop a single bad action mid-execution.</div>
     </div>
@@ -1150,7 +1310,7 @@
   </div>
 
   <!-- Policy Table -->
-  <div style="margin-top: 40px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;" class="reveal">
+  <div style="margin-top: 40px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; overflow: hidden;" class="reveal policy-table-wrap">
     <table class="policy-table">
       <thead>
         <tr>
@@ -1189,19 +1349,41 @@
 <section id="demo">
   <p class="section-label">Demo</p>
   <h2 class="section-title reveal">Watch it in action</h2>
-  <p class="section-desc reveal">Live threat simulation — intercept, approve, freeze, and audit in real time.</p>
+  <p class="section-desc reveal">Live runtime simulation: risk scoring, governance approval, freeze controls, and on-chain execution records.</p>
 
-  <div class="video-wrap reveal">
-    <div class="video-bar">
-      <span class="dot dot-r"></span>
-      <span class="dot dot-y"></span>
-      <span class="dot dot-g"></span>
-      <span class="terminal-title">clawall-demo.mp4</span>
+  <div id="demo-video" class="video-block reveal">
+    <h3 class="video-block-title">Runtime Demo</h3>
+    <p class="video-block-desc">Risk scoring, governance approval, and execution flow in a single run.</p>
+    <div class="video-wrap">
+      <div class="video-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal-title">clawall-demo.mp4</span>
+      </div>
+      <div class="video-inner">
+        <video controls poster="" data-sub-dir="assets/subtitle/demo/" data-sub-files="demo.en.vtt,demo.hi.vtt,demo.ar.vtt,demo.es.vtt,demo.fr.vtt,demo.pt.vtt,demo.ru.vtt,demo.zh.vtt">
+          <source src="assets/video/demo.mp4" type="video/mp4" />
+        </video>
+      </div>
     </div>
-    <div class="video-inner">
-      <video controls poster="">
-        <source src="https://raw.githubusercontent.com/tejas0111/clawall/main/src/demos/demo.mp4" type="video/mp4" />
-      </video>
+  </div>
+
+  <div id="setup-video" class="video-block reveal">
+    <h3 class="video-block-title">ClawAll Setup Walkthrough</h3>
+    <p class="video-block-desc">Step-by-step bootstrap flow for local setup with subtitle support.</p>
+    <div class="video-wrap">
+      <div class="video-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span class="terminal-title">clawall-setup.mp4</span>
+      </div>
+      <div class="video-inner">
+        <video controls poster="" data-sub-dir="assets/subtitle/setup/" data-sub-files="setup.en.vtt,setup.hi.vtt,setup.ar.vtt,setup.es.vtt,setup.fr.vtt,setup.pt.vtt,setup.ru.vtt,setup.zh.vtt">
+          <source src="assets/video/setup.mp4" type="video/mp4" />
+        </video>
+      </div>
     </div>
   </div>
 </section>
@@ -1215,32 +1397,32 @@
 
   <div class="stack-list reveal">
     <div class="stack-item">
-      <span class="stack-icon">⛓</span>
+      <span class="stack-icon">01</span>
       <span class="stack-name">Sui Move</span>
       <span class="stack-role">Smart contract enforcement layer — on-chain constraint minting & execution</span>
     </div>
     <div class="stack-item">
-      <span class="stack-icon">🔌</span>
+      <span class="stack-icon">02</span>
       <span class="stack-name">Sui JSON-RPC</span>
       <span class="stack-role">Transaction signing, execution, and event querying</span>
     </div>
     <div class="stack-item">
-      <span class="stack-icon">🟨</span>
+      <span class="stack-icon">03</span>
       <span class="stack-name">Node.js ESM</span>
       <span class="stack-role">Agent runtime — modular, async, fully typed pipeline</span>
     </div>
     <div class="stack-item">
-      <span class="stack-icon">✈️</span>
+      <span class="stack-icon">04</span>
       <span class="stack-name">Telegram Bot API</span>
       <span class="stack-role">Human governance interface — approvals, freeze, audit commands</span>
     </div>
     <div class="stack-item">
-      <span class="stack-icon">🐋</span>
+      <span class="stack-icon">05</span>
       <span class="stack-name">Walrus</span>
       <span class="stack-role">Decentralized audit blob storage — every execution logged immutably</span>
     </div>
     <div class="stack-item">
-      <span class="stack-icon">🧠</span>
+      <span class="stack-icon">06</span>
       <span class="stack-name">Custom Risk Engine</span>
       <span class="stack-role">Multi-factor behavioral scoring — 8 signals, compounding logic</span>
     </div>
@@ -1281,22 +1463,34 @@
         <span style="color: var(--accent)">GUARD_CAP_ID</span>=&lt;your_guard_cap_id&gt;<br/>
         <span style="color: var(--accent)">PACKAGE_ID</span>=&lt;deployed_package_id&gt;<br/>
         <span style="color: var(--accent)">TG_BOT_TOKEN</span>=&lt;telegram_bot_token&gt;<br/>
-        <span style="color: var(--accent)">TG_CHAT_ID</span>=&lt;telegram_chat_id&gt;
+        <span style="color: var(--accent)">TG_CHAT_ID</span>=&lt;telegram_chat_id&gt;<br/>
+        <span style="color: var(--accent)">CLAWALL_PLUGIN_KEY</span>=&lt;plugin_key&gt;
       </div>
     </div>
     <div class="install-block">
       <div class="install-header">
-        <span class="install-label">Run Demo</span>
-        <button class="copy-btn" onclick="copyCmd(this, 'npm run demo')">copy</button>
+        <span class="install-label">Run Services</span>
+        <button class="copy-btn" onclick="copyCmd(this, 'npm run gateway')">copy</button>
       </div>
       <div class="install-code">
-        <span class="t-prompt">$</span> <span class="t-cmd">npm run demo</span><br/>
-        <span class="t-out">🤖 Telegram bot running...</span><br/>
+        <span class="t-prompt">$</span> <span class="t-cmd">npm run gateway</span><br/>
+        <span class="t-out">Gateway started on 127.0.0.1:3011</span><br/>
+        <span class="t-prompt">$</span> <span class="t-cmd">openclaw clawall status</span><br/>
+        <span class="t-out">Runtime status available</span><br/>
         <br/>
-        <span class="t-dim">/**********************************************/</span><br/>
-        <span class="t-dim">|* 🦞 CLAWALL SHELL                           *|</span><br/>
-        <span class="t-dim">|* Autonomous AI Constraint Layer             *|</span><br/>
-        <span class="t-dim">\**********************************************/</span><br/>
+        <pre class="t-dim" style="margin:0 0 8px; line-height:1.2; white-space:pre;">============================================================================
+===     ===  ===========  =====  ====  ====  =====  =====  ========  =======
+==  ===  ==  ==========    ====  ====  ====  ====    ====  ========  =======
+=  ========  =========  ==  ===  ====  ====  ===  ==  ===  ========  =======
+=  ========  ========  ====  ==  ====  ====  ==  ====  ==  ========  =======
+=  ========  ========  ====  ==   ==    ==  ===  ====  ==  ========  =======
+=  ========  ========        ===  ==    ==  ===        ==  ========  =======
+=  ========  ========  ====  ===  ==    ==  ===  ====  ==  ========  =======
+==  ===  ==  ========  ====  ====    ==    ====  ====  ==  ========  =======
+===     ===        ==  ====  =====  ====  =====  ====  ==        ==        =
+============================================================================</pre>
+        <span class="t-dim">ClawAll Demo Shell</span><br/>
+        <span class="t-dim">Real OpenClaw path with security and tamper controls.</span><br/>
         <br/>
         <span class="t-dim">1  → Normal Transaction</span><br/>
         <span class="t-dim">2  → Medium Risk Transaction</span><br/>
@@ -1319,24 +1513,24 @@
   <h2 class="section-title reveal">What's next</h2>
 
   <div class="roadmap-list reveal">
-    <div class="roadmap-item"><span class="roadmap-icon">◈</span> Multi-sig governance — require M-of-N approvals for critical actions</div>
-    <div class="roadmap-item"><span class="roadmap-icon">◈</span> DAO-based approval — on-chain voting for high-value transfers</div>
-    <div class="roadmap-item"><span class="roadmap-icon">◈</span> Behavior ML anomaly detection — trained baseline per agent identity</div>
-    <div class="roadmap-item"><span class="roadmap-icon">◈</span> Production wallet plugin — browser extension with live risk overlay</div>
-    <div class="roadmap-item"><span class="roadmap-icon">◈</span> zk-risk proofs — verify risk score without revealing agent strategy</div>
-    <div class="roadmap-item"><span class="roadmap-icon">◈</span> Agent identity attestation — verifiable credentials per agent instance</div>
+    <div class="roadmap-item"><span class="roadmap-icon">01</span> Multi-sig governance with operator quorum approvals</div>
+    <div class="roadmap-item"><span class="roadmap-icon">02</span> Expanded tx-history and chainlogs analytics in local dashboard</div>
+    <div class="roadmap-item"><span class="roadmap-icon">03</span> Policy bundle lifecycle tooling (sign, anchor, verify)</div>
+    <div class="roadmap-item"><span class="roadmap-icon">04</span> Stronger automated red-team and forensics pipelines</div>
+    <div class="roadmap-item"><span class="roadmap-icon">05</span> Production-safe proxy pattern for hosted operations UI</div>
+    <div class="roadmap-item"><span class="roadmap-icon">06</span> Attested agent identity and verifiable governance actions</div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <div class="divider"></div>
 <footer>
-  <div class="footer-logo">🦞 <span>Claw</span>All</div>
+  <div class="footer-logo"><span>Claw</span>All</div>
   <div class="footer-note">Built for autonomous AI execution security on Sui.</div>
   <div class="footer-links">
-    <a href="https://github.com/tejas0111/clawall" target="_blank">GitHub</a>
-    <a href="https://suiscan.xyz/testnet" target="_blank">Sui Explorer</a>
-    <a href="#install">Docs</a>
+    <a href="https://github.com/tejas0111/clawall" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="https://suiscan.xyz/testnet" target="_blank" rel="noopener noreferrer">Sui Explorer</a>
+    <a href="./docs.html">Docs</a>
   </div>
 </footer>
 
@@ -1363,111 +1557,187 @@
     });
   }
 
-  // ── TYPEWRITER TERMINAL ────────────────────────────────────────────────
-  // Each entry: [cssClass, text, delayAfter_ms]
-  // cssClass '' = blank line
-  const LINES = [
-    ['t-comment', '# Kill-switch persists across restarts — must reset first', 0],
-    ['', '', 200],
-    ['t-prompt-line', '1', 300],
-    ['t-dim', '⏳ Processing normal transaction...', 60],
-    ['t-dim', '------------------------------------', 0],
-    ['t-light', 'Normal TX', 0],
-    ['t-err',  'Decision : BLOCKED', 0],
-    ['t-err',  'Layer    : KILL_SWITCH', 0],
-    ['t-err',  'Reason   : Kill-switch engaged', 0],
-    ['t-dim',  '------------------------------------', 0],
-    ['', '', 400],
-    ['t-prompt-line', '6', 300],
-    ['t-out', '🔄 In-memory agent state reset', 0],
-    ['', '', 400],
-    ['t-comment', '# Normal transaction — LOW risk, auto-approved', 0],
-    ['', '', 200],
-    ['t-prompt-line', '1', 300],
-    ['t-dim', '⏳ Processing normal transaction...', 60],
-    ['t-dim', '------------------------------------', 0],
-    ['t-light', 'Normal TX', 0],
-    ['t-out',  'Decision : EXECUTED', 0],
-    ['t-out',  'Layer    : EXECUTION', 0],
-    ['t-out',  'OK       : true', 0],
-    ['t-out',  'Digest   : D6gKSC1uNz5aEmD3q7c48cs6YrXzw3phWMfkG2PyjfAS', 0],
-    ['t-info', 'Explorer : https://suiscan.xyz/testnet/tx/D6gKSC1...', 0],
-    ['t-dim',  '------------------------------------', 0],
-    ['', '', 600],
-    ['t-comment', '# OS attack → cross-domain blockchain freeze', 0],
-    ['', '', 200],
-    ['t-prompt-line', '4', 300],
-    ['t-dim', '🚨 Simulating destructive OS command...', 60],
-    ['t-dim', '------------------------------------', 0],
-    ['t-light', 'OS Attack', 0],
-    ['t-err',  'Decision : BLOCKED', 0],
-    ['t-err',  'Layer    : FIREWALL', 0],
-    ['t-err',  'Reason   : Destructive OS command blocked', 0],
-    ['t-dim',  '------------------------------------', 0],
-    ['', '', 500],
-    ['t-comment', '# Blockchain now frozen cross-domain after OS violation', 0],
-    ['', '', 200],
-    ['t-prompt-line', '2', 300],
-    ['t-dim', '⏳ Processing medium risk transaction...', 60],
-    ['t-dim', '👀 Watch Telegram for MEDIUM alert', 60],
-    ['t-dim', '------------------------------------', 0],
-    ['t-light', 'Medium Risk TX', 0],
-    ['t-err',  'Decision : BLOCKED', 0],
-    ['t-err',  'Layer    : KILL_SWITCH', 0],
-    ['t-err',  'Reason   : Kill-switch engaged', 0],
-    ['t-dim',  '------------------------------------', 0],
-    ['', '', 400],
-    ['t-cursor-line', '', 0],
-  ];
-
-  const terminal = document.getElementById('mainTerminal');
-
-  function makeLine(cls, text) {
-    const span = document.createElement('span');
-    span.className = 't-line';
-
-    if (cls === 't-prompt-line') {
-      span.innerHTML = `<span class="t-prompt">clawall&gt;</span> <span class="t-cmd">${text}</span>`;
-    } else if (cls === 't-cursor-line') {
-      span.innerHTML = `<span class="t-prompt">clawall&gt;</span> <span class="cursor"></span>`;
-    } else if (cls === '') {
-      span.innerHTML = '&nbsp;';
-    } else {
-      span.className += ` ${cls}`;
-      span.textContent = text;
+  // ── SUBTITLE AUTO-LOAD ────────────────────────────────────────────────
+  function parseSubsPreference() {
+    let raw = new URLSearchParams(window.location.search).get('subs') || '';
+    if (!raw) {
+      const hash = window.location.hash || '';
+      const qIndex = hash.indexOf('?');
+      if (qIndex !== -1) {
+        const hashQuery = hash.slice(qIndex + 1);
+        raw = new URLSearchParams(hashQuery).get('subs') || '';
+      } else {
+        // Support hash styles like #demo-video&subs=hi
+        const ampIndex = hash.indexOf('&');
+        if (ampIndex !== -1) {
+          const hashParams = hash.slice(ampIndex + 1);
+          raw = new URLSearchParams(hashParams).get('subs') || '';
+        }
+      }
     }
-
-    // fade-in each line
-    span.style.opacity = '0';
-    span.style.transition = 'opacity 0.25s ease';
-    return span;
+    return raw
+      .split(',')
+      .map((v) => v.trim().toLowerCase())
+      .filter(Boolean);
   }
 
-  async function runTypewriter() {
-    // base delay so terminal is in viewport
-    await new Promise(r => setTimeout(r, 600));
+  function detectLangFromFilename(filename) {
+    const m = String(filename).match(/\.([a-z]{2,3}(?:-[a-z]{2})?)\.vtt$/i);
+    return (m && m[1] ? m[1] : 'en').toLowerCase();
+  }
 
-    for (const [cls, text, pause] of LINES) {
-      const line = makeLine(cls, text);
-      terminal.appendChild(line);
-      // trigger reflow then fade in
-      requestAnimationFrame(() => { line.style.opacity = '1'; });
-      terminal.scrollTop = terminal.scrollHeight;
+  function formatLangLabel(lang) {
+    if (!lang) return 'Subtitle';
+    const normalized = lang.toLowerCase();
+    const labels = {
+      en: 'English',
+      hi: 'Hindi',
+      ar: 'Arabic',
+      fr: 'French',
+      es: 'Spanish',
+      de: 'German',
+      ja: 'Japanese',
+      pt: 'Portuguese',
+      ru: 'Russian',
+      zh: 'Chinese',
+      it: 'Italian',
+      ko: 'Korean',
+      tr: 'Turkish',
+      nl: 'Dutch'
+    };
+    if (labels[normalized]) return labels[normalized];
 
-      const wait = pause > 0 ? pause : 55;
-      await new Promise(r => setTimeout(r, wait));
+    // Handle regional tags like en-us, pt-br, zh-cn
+    const base = normalized.split('-')[0];
+    if (labels[base]) {
+      const region = normalized.split('-')[1];
+      if (!region) return labels[base];
+      return `${labels[base]} (${region.toUpperCase()})`;
+    }
+
+    return normalized.toUpperCase();
+  }
+
+  async function listVttFilesFromDir(dirPath) {
+    try {
+      const res = await fetch(dirPath, { cache: 'no-store' });
+      if (!res.ok) return [];
+      const html = await res.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const links = Array.from(doc.querySelectorAll('a[href]'));
+      const files = links
+        .map((a) => a.getAttribute('href') || '')
+        .filter((href) => /\.vtt$/i.test(href))
+        .map((href) => href.split('?')[0].split('#')[0])
+        .map((href) => href.startsWith('http') || href.startsWith('/') ? href : `${dirPath}${href.replace(/^\.?\//, '')}`);
+      return [...new Set(files)];
+    } catch {
+      return [];
     }
   }
 
-  // Only run when terminal scrolls into view
-  const termObs = new IntersectionObserver((entries) => {
-    if (entries[0].isIntersecting) {
-      termObs.disconnect();
-      runTypewriter();
-    }
-  }, { threshold: 0.3 });
+  function rankByPreferredSubs(trackUrl, preferredSubs) {
+    const name = String(trackUrl).split('/').pop().toLowerCase();
+    const lang = detectLangFromFilename(name);
+    const byLang = preferredSubs.indexOf(lang);
+    if (byLang !== -1) return byLang;
+    const byName = preferredSubs.indexOf(name);
+    if (byName !== -1) return byName;
+    return Number.MAX_SAFE_INTEGER;
+  }
 
-  termObs.observe(document.querySelector('.terminal-wrap'));
+  async function installVideoSubtitles() {
+    const preferredSubs = parseSubsPreference();
+    const videos = Array.from(document.querySelectorAll('video[data-sub-dir]'));
+    for (const video of videos) {
+      const dir = (video.dataset.subDir || '').trim();
+      if (!dir) continue;
+      const dirWithSlash = dir.endsWith('/') ? dir : `${dir}/`;
+
+      let subtitleFiles = await listVttFilesFromDir(dirWithSlash);
+      if (subtitleFiles.length === 0) {
+        const fallback = (video.dataset.subFiles || '')
+          .split(',')
+          .map((v) => v.trim())
+          .filter(Boolean)
+          .map((name) => `${dirWithSlash}${name}`);
+        subtitleFiles = fallback;
+      }
+      subtitleFiles = [...new Set(subtitleFiles)];
+      if (subtitleFiles.length === 0) continue;
+
+      const effectivePreferred = preferredSubs.length > 0 ? preferredSubs : ['en'];
+
+      if (effectivePreferred.length > 0) {
+        subtitleFiles.sort((a, b) => {
+          const ra = rankByPreferredSubs(a, effectivePreferred);
+          const rb = rankByPreferredSubs(b, effectivePreferred);
+          if (ra !== rb) return ra - rb;
+          return a.localeCompare(b);
+        });
+      }
+
+      video.querySelectorAll('track[kind="subtitles"]').forEach((t) => t.remove());
+      subtitleFiles.forEach((src, idx) => {
+        const filename = src.split('/').pop() || src;
+        const lang = detectLangFromFilename(filename);
+        const track = document.createElement('track');
+        track.kind = 'subtitles';
+        track.src = src;
+        track.srclang = lang;
+        track.label = formatLangLabel(lang);
+        if (idx === 0) track.default = true;
+        video.appendChild(track);
+      });
+    }
+  }
+
+  installVideoSubtitles();
+
+  // ── MOBILE NAV DRAWER ────────────────────────────────────────────────
+  const navToggle = document.querySelector('.nav-toggle');
+  const navDrawer = document.getElementById('navMenu');
+  function setNavOpen(open) {
+    if (!navToggle || !navDrawer) return;
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    navDrawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+    navDrawer.classList.toggle('open', open);
+  }
+  if (navToggle && navDrawer) {
+    navToggle.addEventListener('click', () => setNavOpen(!navDrawer.classList.contains('open')));
+    navDrawer.addEventListener('click', (e) => {
+      const link = e.target.closest('a');
+      if (link) setNavOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setNavOpen(false);
+    });
+    document.addEventListener('click', (e) => {
+      if (!navDrawer.classList.contains('open')) return;
+      if (!e.target.closest('nav')) setNavOpen(false);
+    });
+  }
+
+  // ── HASH NORMALIZATION FOR #id?query STYLE ────────────────────────────
+  function normalizedHashId() {
+    const raw = window.location.hash || '';
+    if (!raw.startsWith('#')) return '';
+    return raw.slice(1).split('?')[0].trim();
+  }
+
+  function scrollToNormalizedHash() {
+    const id = normalizedHashId();
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    requestAnimationFrame(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  scrollToNormalizedHash();
+  window.addEventListener('hashchange', scrollToNormalizedHash);
+
 </script>
 </body>
 </html>

@@ -1,0 +1,196 @@
+1
+00:00:00,366 --> 00:00:02,366
+Let’s start the Clawall demo.
+
+2
+00:00:03,566 --> 00:00:09,866
+First, I run "openclaw clawall -h" to verify that Clawall is installed and accessible.
+
+3
+00:00:14,533 --> 00:00:22,333
+Then I run "openclaw clawall wallet" to check wallet connectivity and confirm the runtime context is loaded.
+
+4
+00:00:29,600 --> 00:00:33,966
+Wallet is loaded and shows all available coins with their balances.
+
+5
+00:00:34,533 --> 00:00:40,700
+Now I run "npm run topup" to open the vault top-up flow.
+
+6
+00:00:41,400 --> 00:00:49,700
+The script asks for the private key; mine is loaded from environment variables, and the vault ID is read from .env.
+
+7
+00:00:57,366 --> 00:01:01,966
+Now you can select the desired coin and enter the amount to top up.
+
+8
+00:01:02,733 --> 00:01:06,266
+Select 0 when the top-up is done to exit.
+
+9
+00:01:13,200 --> 00:01:19,466
+Now I run "openclaw clawall transfer 0.0032 WAL to recipient_address"
+
+10
+00:01:27,133 --> 00:01:35,066
+Transfer is now being processed on-chain; I’ll wait for confirmation and then verify the transaction details.
+
+11
+00:01:37,400 --> 00:01:39,900
+Transfer executed successfully.
+
+12
+00:01:39,900 --> 00:01:45,033
+I received the transaction digest and Explorer link for on-chain proof.
+
+13
+00:01:46,633 --> 00:01:49,000
+let’s run it through the agent interface.
+
+14
+00:01:53,466 --> 00:01:57,400
+we verify wallet balance and execute a test transfer.
+
+15
+00:02:17,000 --> 00:02:21,900
+The agent shows the updated wallet balance, and the transaction is confirmed.
+
+16
+00:02:33,833 --> 00:02:38,966
+We’ll also confirm the wallet balance in the terminal to cross-verify the result.
+
+17
+00:02:50,166 --> 00:02:54,066
+Now we’ll run another transfer to validate the flow one more time.
+
+18
+00:03:01,400 --> 00:03:04,500
+Request is submitted; we’ll wait for the agent’s response.
+
+19
+00:03:06,333 --> 00:03:11,666
+Telegram alert was triggered due to frequent transfers to the same recipient in a short time.
+
+20
+00:03:12,433 --> 00:03:14,900
+Now we will approve the transaction.
+
+21
+00:03:26,566 --> 00:03:31,433
+Approval is received, and the transaction is now broadcast successfully.
+
+22
+00:03:38,700 --> 00:03:41,200
+Now we’ll demonstrate a rejection scenario.
+
+23
+00:03:42,833 --> 00:03:49,000
+We’ll now attempt a transfer, deny it in Telegram, and observe how Clawall blocks execution.
+
+24
+00:03:56,833 --> 00:04:03,400
+We received a Telegram approval prompt for this high-risk transaction, and now we’re denying it.
+
+25
+00:04:07,266 --> 00:04:11,100
+As expected, Clawall blocks the transfer through the governance layer.
+
+26
+00:04:17,700 --> 00:04:22,100
+Now we’ll review the recent transaction history to verify the full decision trail.
+
+27
+00:04:23,700 --> 00:04:30,800
+We got the 10 most recent transactions processed by Clawall, including digest and full execution details.
+
+28
+00:04:40,866 --> 00:04:45,000
+We can also fetch and review logs directly through Telegram commands.
+
+29
+00:04:45,766 --> 00:04:49,600
+We also received the full transaction details through Telegram.
+
+30
+00:04:56,100 --> 00:05:00,100
+Now we’ll run the demo shell to simulate additional edge cases.
+
+31
+00:05:01,000 --> 00:05:06,733
+We’ll now simulate a tamper attack, where Clawall detects that protected files were modified.
+
+32
+00:05:09,300 --> 00:05:13,500
+Now we’ll attempt to execute a transaction and observe the policy decision.
+
+33
+00:05:19,633 --> 00:05:27,166
+The transaction is blocked by policy enforcement, and we also receive a Telegram tamper alert confirming the integrity breach.
+
+34
+00:05:36,833 --> 00:05:40,066
+Now we’ll verify the agent state using the demo shell.
+
+35
+00:05:41,000 --> 00:05:45,000
+We’ll fix tamper mode first, then retry the transaction.
+
+36
+00:05:47,500 --> 00:05:52,266
+Now that the hash is restored, the transaction should execute successfully.
+
+37
+00:05:54,666 --> 00:05:59,666
+Since the agent is sending many transactions, we expect a Telegram approval prompt.
+
+38
+00:06:07,866 --> 00:06:12,900
+Now we can see tamper mode is fixed, so the transaction executes successfully.
+
+39
+00:06:18,200 --> 00:06:20,833
+Now we’ll check our wallet through the demo shell.
+
+40
+00:06:23,933 --> 00:06:26,300
+We can see the wallet balance clearly.
+
+41
+00:06:28,866 --> 00:06:33,300
+Now we’ll start the ClawAll local dashboard by running "npm run dashboard".
+
+42
+00:06:34,500 --> 00:06:41,033
+Great, the dashboard server is up, and now we have the local dashboard link ready to open in the browser.
+
+43
+00:06:41,600 --> 00:06:46,133
+Now I’ll open the dashboard in the browser so we can review the live operational view.
+
+44
+00:06:47,466 --> 00:06:50,633
+We can see all transactions and live status here.
+
+45
+00:06:52,866 --> 00:06:56,700
+Also here’s our vault balances and coin holdings, live.
+
+46
+00:06:56,700 --> 00:07:03,800
+Here we can see the recent transactions, and each one includes an explorer link for quick verification.
+
+47
+00:07:05,966 --> 00:07:10,966
+Perfect, the link opened and the transaction is confirmed on-chain.
+
+48
+00:07:13,000 --> 00:07:19,700
+That’s the ClawAll dashboard: live risk, vault, and transaction visibility in one place.
+
+49
+00:07:20,266 --> 00:07:22,266
+So that was the ClawAll demo.
+

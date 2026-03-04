@@ -10,3 +10,5 @@ src/state/kill-switch.json
 src/state/agent-persistent-state.json
 src/state/prompt-quarantine.json
 src/state/forensics/
+src/state/red-team-benchmark.json
+src/state/red-team-benchmark.md

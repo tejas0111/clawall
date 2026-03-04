@@ -1,0 +1,148 @@
+WEBVTT
+
+00:00.366 --> 00:02.366
+Comencemos la demo de Clawall.
+
+00:03.566 --> 00:09.866
+Primero ejecuto "openclaw clawall -h" para verificar que Clawall está instalado y accesible.
+
+00:14.533 --> 00:22.333
+Luego ejecuto "openclaw clawall wallet" para comprobar la conectividad de la wallet y confirmar que el contexto de runtime está cargado.
+
+00:29.600 --> 00:33.966
+La wallet está cargada y muestra todas las monedas disponibles con sus balances.
+
+00:34.533 --> 00:40.700
+Ahora ejecuto "npm run topup" para abrir el flujo de top-up del vault.
+
+00:41.400 --> 00:49.700
+El script pide la clave privada; la mía está cargada desde variables de entorno y el vault ID se lee desde .env.
+
+00:57.366 --> 01:01.966
+Ahora puedes seleccionar la moneda deseada e ingresar el monto para el top-up.
+
+01:02.733 --> 01:06.266
+Selecciona 0 cuando el top-up termine para salir.
+
+01:13.200 --> 01:19.466
+Ahora ejecuto "openclaw clawall transfer 0.0032 WAL to recipient_address".
+
+01:27.133 --> 01:35.066
+La transferencia se está procesando on-chain; esperaré la confirmación y luego verificaré los detalles de la transacción.
+
+01:37.400 --> 01:39.900
+Transferencia ejecutada correctamente.
+
+01:39.900 --> 01:45.033
+Recibí el digest de la transacción y el enlace del Explorer como prueba on-chain.
+
+01:46.633 --> 01:49.000
+Ahora ejecutémoslo desde la interfaz del agente.
+
+01:53.466 --> 01:57.400
+Verificamos el balance de la wallet y ejecutamos una transferencia de prueba.
+
+02:17.000 --> 02:21.900
+El agente muestra el balance actualizado de la wallet y la transacción está confirmada.
+
+02:33.833 --> 02:38.966
+También confirmaremos el balance de la wallet en terminal para validar el resultado.
+
+02:50.166 --> 02:54.066
+Ahora ejecutaremos otra transferencia para validar el flujo una vez más.
+
+03:01.400 --> 03:04.500
+La solicitud fue enviada; esperaremos la respuesta del agente.
+
+03:06.333 --> 03:11.666
+Se activó una alerta de Telegram por transferencias frecuentes al mismo destinatario en poco tiempo.
+
+03:12.433 --> 03:14.900
+Ahora aprobaremos la transacción.
+
+03:26.566 --> 03:31.433
+Se recibió la aprobación y la transacción se difundió correctamente.
+
+03:38.700 --> 03:41.200
+Ahora mostraremos un escenario de rechazo.
+
+03:42.833 --> 03:49.000
+Intentaremos una transferencia, la rechazaremos en Telegram y observaremos cómo Clawall bloquea la ejecución.
+
+03:56.833 --> 04:03.400
+Recibimos un prompt de aprobación en Telegram para esta transacción de alto riesgo y ahora la estamos rechazando.
+
+04:07.266 --> 04:11.100
+Como se esperaba, Clawall bloquea la transferencia mediante la capa de gobernanza.
+
+04:17.700 --> 04:22.100
+Ahora revisaremos el historial reciente de transacciones para verificar todo el rastro de decisiones.
+
+04:23.700 --> 04:30.800
+Obtuvimos las 10 transacciones más recientes procesadas por Clawall, incluyendo digest y detalles completos de ejecución.
+
+04:40.866 --> 04:45.000
+También podemos consultar y revisar logs directamente mediante comandos de Telegram.
+
+04:45.766 --> 04:49.600
+También recibimos los detalles completos de la transacción a través de Telegram.
+
+04:56.100 --> 05:00.100
+Ahora ejecutaremos la demo shell para simular casos límite adicionales.
+
+05:01.000 --> 05:06.733
+Ahora simularemos un ataque de manipulación, donde Clawall detecta que archivos protegidos fueron modificados.
+
+05:09.300 --> 05:13.500
+Ahora intentaremos ejecutar una transacción y observar la decisión de la política.
+
+05:19.633 --> 05:27.166
+La transacción es bloqueada por la política y también recibimos una alerta de manipulación en Telegram que confirma la brecha de integridad.
+
+05:36.833 --> 05:40.066
+Ahora verificaremos el estado del agente usando la demo shell.
+
+05:41.000 --> 05:45.000
+Primero corregiremos el modo tamper y luego reintentaremos la transacción.
+
+05:47.500 --> 05:52.266
+Ahora que el hash fue restaurado, la transacción debería ejecutarse correctamente.
+
+05:54.666 --> 05:59.666
+Como el agente está enviando muchas transacciones, esperamos un prompt de aprobación en Telegram.
+
+06:07.866 --> 06:12.900
+Ahora podemos ver que el modo tamper está corregido, por lo que la transacción se ejecuta correctamente.
+
+06:18.200 --> 06:20.833
+Ahora revisaremos nuestra wallet desde la demo shell.
+
+06:23.933 --> 06:26.300
+Podemos ver claramente el balance de la wallet.
+
+06:28.866 --> 06:33.300
+Ahora iniciaremos el dashboard local de ClawAll ejecutando "npm run dashboard".
+
+06:34.500 --> 06:41.033
+Perfecto, el servidor del dashboard está activo y ya tenemos el enlace local listo para abrir en el navegador.
+
+06:41.600 --> 06:46.133
+Ahora abriré el dashboard en el navegador para revisar la vista operativa en vivo.
+
+06:47.466 --> 06:50.633
+Aquí podemos ver todas las transacciones y el estado en vivo.
+
+06:52.866 --> 06:56.700
+También vemos aquí nuestros balances del vault y holdings de monedas, en vivo.
+
+06:56.700 --> 07:03.800
+Aquí vemos las transacciones recientes, y cada una incluye un enlace al explorer para verificación rápida.
+
+07:05.966 --> 07:10.966
+Perfecto, el enlace se abrió y la transacción está confirmada on-chain.
+
+07:13.000 --> 07:19.700
+Ese es el dashboard de ClawAll: riesgo en vivo, vault y visibilidad de transacciones en un solo lugar.
+
+07:20.266 --> 07:22.266
+Y esa fue la demo de ClawAll.

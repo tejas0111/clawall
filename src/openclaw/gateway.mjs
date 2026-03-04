@@ -520,8 +520,21 @@ async function fetchPriceSummary({ coinType, amountRaw = null }) {
   };
 }
 
-function json(res, code, payload) {
+function setCorsHeaders(req, res) {
+  const origin = String(req?.headers?.origin || '*');
+  res.setHeader('access-control-allow-origin', origin === 'null' ? '*' : origin);
+  res.setHeader('vary', 'origin');
+  res.setHeader('access-control-allow-methods', 'GET, POST, OPTIONS');
+  res.setHeader(
+    'access-control-allow-headers',
+    'content-type, authorization, x-clawall-plugin-key, x-clawall-source'
+  );
+  res.setHeader('access-control-max-age', '86400');
+}
+
+function json(req, res, code, payload) {
   const body = JSON.stringify(payload, null, 2);
+  setCorsHeaders(req, res);
   res.writeHead(code, {
     'content-type': 'application/json; charset=utf-8',
     'content-length': Buffer.byteLength(body),
@@ -661,11 +674,18 @@ async function startServer({ host = DEFAULT_HOST, port = DEFAULT_PORT } = {}) {
     try {
       const reqUrl = new URL(req.url || '/', `http://${req.headers.host || 'localhost'}`);
       const reply = (code, payload) => {
-        json(res, code, payload);
+        json(req, res, code, payload);
         if (verboseLogs) {
           console.log(`[clawall-gateway] req=${reqId} ${req.method} ${reqUrl.pathname} -> ${code} ${Date.now() - startedAt}ms`);
         }
       };
+
+      if (req.method === 'OPTIONS') {
+        setCorsHeaders(req, res);
+        res.writeHead(204);
+        res.end();
+        return;
+      }
 
       if (req.method === 'GET' && reqUrl.pathname === '/health') {
         reply(200, {
@@ -810,7 +830,7 @@ async function startServer({ host = DEFAULT_HOST, port = DEFAULT_PORT } = {}) {
         `[clawall-gateway] req=${reqId} unhandled error:`,
         err?.stack || err?.message || err
       );
-      json(res, 500, {
+      json(req, res, 500, {
         ok: false,
         error: String(err?.message ?? err),
       });

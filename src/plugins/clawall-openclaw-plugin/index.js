@@ -536,6 +536,8 @@ export default function(api) {
   api.registerCommand({ name: 'clawall_check', handler: async (args) => (await doCheck(api, args)).text });
   api.registerCommand({ name: 'clawall_tx', handler: async (args) => (await doTx(api, args)).text });
   api.registerCommand({ name: 'clawall_transfer', handler: async (args) => (await doTransfer(api, args)).text });
+  api.registerCommand({ name: 'clawall_send', handler: async (args) => (await doTransfer(api, args)).text });
+  api.registerCommand({ name: 'clawall_pay', handler: async (args) => (await doTransfer(api, args)).text });
   api.registerCli(({ program }) => {
     const cmd = program.command('clawall');
     const transferHandler = async (argsArray) => console.log((await doTransfer(api, argsArray.join(' '))).text);

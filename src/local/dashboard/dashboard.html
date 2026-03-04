@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClawAll Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--black:#050608;--dark:#0a0c10;--panel:#0f1117;--border:#1e2330;--dim:#2a3040;--muted:#4a5568;--body:#8892a4;--light:#c8d0de;--white:#eef2f8;--red:#ff3d3d;--yellow:#ffc300;--green:#00e87a;--cyan:#00d4ff;--accent:#ff4500}
+    body{font-family:'JetBrains Mono',monospace;background:var(--black);color:var(--body);overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;opacity:.35;z-index:1000}
+    nav{position:sticky;top:0;z-index:100;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(5,6,8,.86);backdrop-filter:blur(12px)}
+    .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.15rem;color:var(--white);text-decoration:none}
+    .nav-logo span{color:var(--accent)}
+    .nav-links{display:flex;gap:28px;list-style:none}
+    .nav-links a{color:var(--muted);text-decoration:none;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase}
+    .nav-links a:hover{color:var(--white)}
+    .nav-btn{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:6px;color:var(--light);text-decoration:none;font-size:.74rem}
+    .nav-btn:hover{border-color:var(--accent);color:var(--white)}
+
+    .hero{padding:52px 40px 16px;position:relative;overflow:hidden}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,69,0,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,69,0,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%)}
+    .hero-inner{max-width:1160px;margin:0 auto;position:relative;z-index:2}
+    .hero-badge{display:inline-flex;gap:8px;padding:6px 14px;border:1px solid rgba(255,69,0,.35);background:rgba(255,69,0,.08);color:var(--accent);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase}
+    .hero h1{font-family:'Syne',sans-serif;color:var(--white);font-size:clamp(1.8rem,3.8vw,2.9rem);line-height:1.08;margin-top:14px}
+    .hero p{margin-top:10px;max-width:900px}
+
+    .container{max-width:1160px;margin:0 auto;padding:14px 40px 40px;position:relative;z-index:2}
+    .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:14px}
+    .card h3{font-size:.86rem;text-transform:uppercase;letter-spacing:.07em;color:var(--light);margin-bottom:10px}
+
+    .metric{grid-column:span 3}
+    .metric .value{color:var(--white);font-size:1.7rem;font-weight:700}
+    .metric .delta{margin-top:6px;font-size:.74rem}
+
+    .gateway{grid-column:span 12}
+    .gateway-row{display:grid;grid-template-columns:1fr 180px auto auto;gap:8px}
+    .input, .select, .btn{background:var(--dark);border:1px solid var(--border);border-radius:8px;color:var(--light);font-family:'JetBrains Mono',monospace;font-size:.76rem;padding:10px 12px}
+    .btn{cursor:pointer}
+    .btn:hover{border-color:var(--accent)}
+    .status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--muted)}
+
+    .risk{grid-column:span 8}
+    .gov{grid-column:span 4}
+    .vault{grid-column:span 6}
+    .logs{grid-column:span 6}
+    .digests{grid-column:span 12}
+
+    .ok{color:var(--green)} .warn{color:var(--yellow)} .bad{color:var(--red)} .dim{color:var(--muted)}
+    .bar{height:12px;border-radius:999px;background:#0b0e13;border:1px solid var(--border);overflow:hidden;margin:10px 0}
+    .bar>span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--yellow),var(--red));transition:width .25s ease}
+    .pill{display:inline-block;border:1px solid var(--dim);color:var(--light);font-size:.68rem;padding:4px 9px;border-radius:999px;margin-right:6px}
+    .list{display:grid;gap:8px}
+    .row{display:flex;justify-content:space-between;gap:8px;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--dark)}
+    .mono{font-size:.73rem;font-family:'JetBrains Mono',monospace}
+    .spark{margin-top:8px;border:1px solid var(--border);border-radius:8px;background:#0b0e13;padding:8px}
+    .spark svg{display:block;width:100%;height:52px}
+    .spark-label{margin-top:6px;font-size:.7rem;color:var(--muted)}
+
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:9px 6px;border-bottom:1px solid var(--border);text-align:left;font-size:.82rem}
+    th{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+    .terminal{background:#0b0e13;border:1px solid var(--border);border-radius:8px;padding:12px;max-height:280px;overflow:auto}
+    .line{display:block;font-size:.77rem;line-height:1.62}
+    .line .t-ok{color:var(--green)} .line .t-bad{color:var(--red)} .line .t-info{color:var(--cyan)}
+
+    .digest-list{display:grid;gap:8px}
+    .digest-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--dark)}
+    .digest-item code{color:var(--light);font-size:.73rem}
+    .digest-item a{color:var(--cyan);font-size:.72rem;text-decoration:none}
+    .digest-item a:hover{text-decoration:underline}
+
+    @media (max-width:1020px){
+      nav,.hero,.container{padding-left:20px;padding-right:20px}
+      .nav-links{display:none}
+      .metric{grid-column:span 6}
+      .gateway-row{grid-template-columns:1fr 1fr}
+      .risk,.gov,.vault,.logs,.digests{grid-column:span 12}
+    }
+    @media (max-width:640px){
+      .metric{grid-column:span 12}
+      .gateway-row{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a class="nav-logo" href="https://clawall.netlify.app"><span>Claw</span>All Dashboard</a>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#risk">Risk</a></li>
+      <li><a href="#governance">Governance</a></li>
+      <li><a href="#vault">Vault</a></li>
+      <li><a href="#digests">Digests</a></li>
+    </ul>
+    <a class="nav-btn" href="https://clawall.netlify.app/docs.html">Docs</a>
+  </nav>
+
+  <section class="hero" id="overview">
+    <div class="hero-grid"></div>
+    <div class="hero-inner">
+      <div class="hero-badge">Live Runtime Monitor</div>
+      <h1>Operational dashboard for ClawAll policy enforcement on Sui.</h1>
+      <p>Track risk decisions, governance approvals, wallet balances, and latest transaction digests in one place.</p>
+    </div>
+  </section>
+
+  <main class="container">
+    <section class="grid">
+      <article class="card gateway">
+        <h3>Gateway Target</h3>
+        <div class="gateway-row">
+          <input id="gateway-url" class="input" placeholder="http://127.0.0.1:3011" />
+          <select id="gateway-preset" class="select">
+            <option value="/api">Local Proxy (Recommended)</option>
+            <option value="http://127.0.0.1:3011">Direct Local</option>
+          </select>
+          <button id="gateway-apply" class="btn">Apply</button>
+          <div class="btn" style="cursor:default"><span id="gw-dot" class="status-dot"></span><span id="gw-state">idle</span></div>
+        </div>
+      </article>
+
+      <article class="card metric">
+        <h3>24h Requests</h3><p class="value" id="m-requests">--</p><p class="delta dim" id="m-requests-note">Loading...</p>
+      </article>
+      <article class="card metric">
+        <h3>Blocked</h3><p class="value" id="m-blocked">--</p><p class="delta dim" id="m-blocked-note">Loading...</p>
+      </article>
+      <article class="card metric">
+        <h3>Pending Approval</h3><p class="value" id="m-pending">--</p><p class="delta dim" id="m-pending-note">Loading...</p>
+      </article>
+      <article class="card metric">
+        <h3>Audit/Health</h3><p class="value" id="m-audit">--</p><p class="delta dim" id="m-audit-note">Loading...</p>
+      </article>
+
+      <article class="card risk" id="risk">
+        <h3>Risk Engine</h3>
+        <p><span class="pill" id="risk-current">Current: --</span><span class="pill" id="risk-score">Score: --/100</span></p>
+        <div class="bar"><span id="risk-bar"></span></div>
+        <div class="list">
+          <div class="row"><span>Freeze State</span><strong id="risk-freeze" class="dim">--</strong></div>
+          <div class="row"><span>Policy Mode</span><strong id="risk-policy" class="dim">--</strong></div>
+          <div class="row"><span>Source</span><strong id="risk-source" class="dim">/v1/status</strong></div>
+        </div>
+        <div class="spark">
+          <svg id="risk-spark" viewBox="0 0 240 52" preserveAspectRatio="none"></svg>
+          <div class="spark-label">Risk sparkline (last 30 samples)</div>
+        </div>
+      </article>
+
+      <article class="card gov" id="governance">
+        <h3>Governance Queue</h3>
+        <div class="list" id="gov-list"><div class="row"><span>Runtime</span><span class="mono">Loading...</span></div></div>
+        <div class="spark">
+          <svg id="blocked-spark" viewBox="0 0 240 52" preserveAspectRatio="none"></svg>
+          <div class="spark-label">Blocked count trend (last 30 samples)</div>
+        </div>
+      </article>
+
+      <article class="card vault" id="vault">
+        <h3>Vault Balances</h3>
+        <table>
+          <thead><tr><th>Coin</th><th>Balance</th><th>Status</th></tr></thead>
+          <tbody id="vault-body"><tr><td colspan="3" class="dim">Loading wallet balances...</td></tr></tbody>
+        </table>
+      </article>
+
+      <article class="card logs">
+        <h3>Recent Logs</h3>
+        <div class="terminal" id="log-box"><span class="line"><span class="t-info">[boot]</span> Starting dashboard...</span></div>
+      </article>
+
+      <article class="card digests" id="digests">
+        <h3>Latest Transaction Digests</h3>
+        <div id="digest-list" class="digest-list">
+          <div class="digest-item"><code>Waiting for /v1/status or audit payload...</code><span class="dim mono">--</span></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const logs = [];
+    const riskHistory = [];
+    const blockedHistory = [];
+    const digestMap = new Map();
+    const LS_KEY = "clawall_dashboard_gateway";
+
+    let baseUrl = localStorage.getItem(LS_KEY) || "/api";
+
+    function now() { return new Date().toLocaleTimeString(); }
+    function asNum(v) { const n = typeof v === "number" ? v : Number(v); return Number.isFinite(n) ? n : null; }
+    function setText(id, v) { const el = $(id); if (el) el.textContent = v; }
+    function findAny(obj, keys) { for (const k of keys) if (obj && obj[k] !== undefined && obj[k] !== null) return obj[k]; return null; }
+
+    function logLine(type, text) {
+      logs.unshift({ type, text, t: now() });
+      while (logs.length > 10) logs.pop();
+      $("log-box").innerHTML = logs.map((l) => `<span class="line"><span class="${l.type === "ok" ? "t-ok" : l.type === "bad" ? "t-bad" : "t-info"}">[${l.t}]</span> ${l.text}</span>`).join("");
+    }
+
+    function setGatewayState(state, ok) {
+      setText("gw-state", state);
+      const dot = $("gw-dot");
+      dot.style.background = ok === null ? "var(--muted)" : (ok ? "var(--green)" : "var(--red)");
+    }
+
+    async function getJson(path) {
+      const url = `${baseUrl}${path}`;
+      const res = await fetch(url, {
+        headers: {
+          accept: "application/json",
+          "x-clawall-source": "dashboard"
+        }
+      });
+      if (!res.ok) throw new Error(`${path} -> ${res.status}`);
+      return await res.json();
+    }
+
+    async function getJsonSafe(path) {
+      try {
+        const data = await getJson(path);
+        return { ok: true, data, error: null };
+      } catch (err) {
+        return { ok: false, data: null, error: String(err?.message || err) };
+      }
+    }
+
+    function pushSeries(arr, value) {
+      arr.push(value);
+      if (arr.length > 30) arr.shift();
+    }
+
+    function renderSpark(svgId, series, color) {
+      const svg = $(svgId);
+      const w = 240, h = 52, p = 3;
+      if (!series.length) { svg.innerHTML = ""; return; }
+      const max = Math.max(...series, 1);
+      const min = Math.min(...series, 0);
+      const span = Math.max(1, max - min);
+      const points = series.map((v, i) => {
+        const x = p + (i * (w - p * 2)) / Math.max(1, series.length - 1);
+        const y = h - p - ((v - min) * (h - p * 2)) / span;
+        return `${x.toFixed(2)},${y.toFixed(2)}`;
+      }).join(" ");
+      svg.innerHTML = `<polyline fill="none" stroke="${color}" stroke-width="2" points="${points}" /><polyline fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1" points="3,49 237,49"/>`;
+    }
+
+    function extractDigests(obj, out = new Set()) {
+      const keyHint = /digest|tx|transaction/i;
+      const rx = /\b[A-Za-z0-9]{40,60}\b/g;
+      if (obj == null) return out;
+      if (Array.isArray(obj)) { obj.forEach((v) => extractDigests(v, out)); return out; }
+      if (typeof obj === "object") {
+        Object.entries(obj).forEach(([k, v]) => {
+          if (typeof v === "string") {
+            const hits = v.match(rx) || [];
+            hits.forEach((h) => { if (h.length >= 43 && h.length <= 45) out.add(h); });
+          }
+          if (typeof v === "string" && keyHint.test(k)) out.add(v.trim());
+          extractDigests(v, out);
+        });
+        return out;
+      }
+      if (typeof obj === "string") {
+        const hits = obj.match(rx) || [];
+        hits.forEach((h) => { if (h.length >= 43 && h.length <= 45) out.add(h); });
+      }
+      return out;
+    }
+
+    function renderDigests() {
+      const container = $("digest-list");
+      const items = [...digestMap.values()].slice(0, 8);
+      if (!items.length) {
+        container.innerHTML = '<div class="digest-item"><code>No digest detected yet</code><span class="dim mono">--</span></div>';
+        return;
+      }
+      container.innerHTML = items.map((d) => {
+        const short = `${d.digest.slice(0, 10)}...${d.digest.slice(-8)}`;
+        const link = `https://suiscan.xyz/testnet/tx/${d.digest}`;
+        return `<div class="digest-item"><code>${short}</code><a target="_blank" href="${link}">view on suiscan</a></div>`;
+      }).join("");
+    }
+
+    function renderVault(wallet) {
+      const body = $("vault-body");
+      const rows = [];
+      const balances = findAny(wallet, ["balances", "coins", "assets", "tokens"]);
+      if (Array.isArray(balances) && balances.length) {
+        balances.slice(0, 10).forEach((b) => {
+          const symbol = findAny(b, ["symbol", "coin", "ticker", "name"]) || "COIN";
+          const amount = findAny(b, ["display", "balance", "amount", "human", "total_balance_human", "total_balance"]) ?? "--";
+          const val = asNum(findAny(b, ["balance", "amount", "total_balance"]));
+          const status = val === 0 ? ["Empty", "warn"] : ["Healthy", "ok"];
+          rows.push(`<tr><td>${symbol}</td><td>${amount}</td><td class="${status[1]}">${status[0]}</td></tr>`);
+        });
+      } else {
+        const raw = findAny(wallet, ["total", "sui", "balance"]);
+        rows.push(`<tr><td>SUI</td><td>${raw ?? "--"}</td><td class="ok">Live</td></tr>`);
+      }
+      body.innerHTML = rows.join("");
+    }
+
+    function renderGovernance(status, txHistory) {
+      const items = Array.isArray(txHistory?.items) ? txHistory.items : [];
+      const requested = items.filter((i) => String(i?.event_type || "").includes("approval_requested")).length;
+      const resolved = items.filter((i) => String(i?.event_type || "").includes("approval_resolved")).length;
+      const pending = Math.max(0, requested - resolved);
+      const freeze = !!status?.kill_switch?.frozen || !!findAny(status, ["frozen", "freeze_active"]);
+      const policy = status?.kill_switch?.triggered_by ? `kill_switch:${status.kill_switch.triggered_by}` : "runtime-policy";
+      $("gov-list").innerHTML =
+        `<div class="row"><span>Pending approvals</span><span class="mono">${pending}</span></div>` +
+        `<div class="row"><span>Freeze state</span><span class="mono ${freeze ? "bad" : "ok"}">${freeze ? "ACTIVE" : "clear"}</span></div>` +
+        `<div class="row"><span>Policy mode</span><span class="mono">${policy}</span></div>`;
+    }
+
+    function renderMetrics(status, healthOk, txHistory) {
+      const items = Array.isArray(txHistory?.items) ? txHistory.items : [];
+      const req24 = items.length || asNum(findAny(status, ["requests_24h", "total_requests_24h", "total_requests"])) || 0;
+      const blocked = items.filter((i) => {
+        const s = String(i?.status || i?.decision || "").toUpperCase();
+        return s.includes("BLOCK");
+      }).length || asNum(findAny(status, ["blocked_24h", "blocked", "blocked_count"])) || 0;
+      const pending = Math.max(
+        0,
+        items.filter((i) => String(i?.event_type || "").includes("approval_requested")).length -
+        items.filter((i) => String(i?.event_type || "").includes("approval_resolved")).length
+      );
+      const latest = items[0] || {};
+      const risk = asNum(findAny(latest, ["risk_score", "score"])) ?? asNum(findAny(status, ["risk_score", "current_risk_score", "score"])) ?? 0;
+      const state = String(findAny(latest, ["risk_level", "state"]) || findAny(status, ["risk_level", "current_risk", "state"]) || "UNKNOWN").toUpperCase();
+      const freeze = !!status?.kill_switch?.frozen || !!findAny(status, ["frozen", "freeze_active"]);
+      const policy = status?.kill_switch?.triggered_by ? `kill_switch:${status.kill_switch.triggered_by}` : "runtime-policy";
+
+      setText("m-requests", String(req24));
+      setText("m-requests-note", "Live from /v1/tx-history");
+      setText("m-blocked", String(blocked));
+      setText("m-blocked-note", req24 ? `${Math.round((blocked / Math.max(req24, 1)) * 100)}% blocked` : "No volume yet");
+      setText("m-pending", String(pending));
+      setText("m-pending-note", pending ? "Telegram approvals pending" : "Queue clear");
+      setText("m-audit", healthOk ? "100%" : (items.length ? "partial" : "--"));
+      setText("m-audit-note", healthOk ? "Runtime healthy" : (items.length ? "History reachable" : "Health unavailable"));
+
+      setText("risk-current", `Current: ${state}`);
+      setText("risk-score", `Score: ${risk}/100`);
+      setText("risk-freeze", freeze ? "ACTIVE" : "clear");
+      setText("risk-policy", String(policy));
+      $("risk-freeze").className = freeze ? "bad" : "ok";
+      $("risk-bar").style.width = `${Math.max(0, Math.min(100, risk))}%`;
+
+      pushSeries(riskHistory, risk);
+      pushSeries(blockedHistory, blocked);
+      renderSpark("risk-spark", riskHistory, "#00d4ff");
+      renderSpark("blocked-spark", blockedHistory, "#ff4500");
+    }
+
+    function applyGateway(url) {
+      baseUrl = String(url || "").trim().replace(/\/$/, "");
+      if (!baseUrl) baseUrl = "/api";
+      localStorage.setItem(LS_KEY, baseUrl);
+      $("gateway-url").value = baseUrl;
+      setGatewayState("configured", null);
+      logLine("info", `Gateway set to ${baseUrl}`);
+    }
+
+    async function refresh() {
+      setGatewayState("fetching", null);
+      try {
+        const [healthRes, statusRes, walletRes, auditRes, txHistoryRes, chainlogsRes] = await Promise.all([
+          getJsonSafe("/health"),
+          getJsonSafe("/v1/status"),
+          getJsonSafe("/v1/wallet"),
+          getJsonSafe("/v1/audit"),
+          getJsonSafe("/v1/tx-history?limit=40"),
+          getJsonSafe("/v1/chainlogs?limit=20&full=true")
+        ]);
+
+        const healthRaw = healthRes.data;
+        const statusRaw = statusRes.data;
+        const walletRaw = walletRes.data;
+        const auditRaw = auditRes.data;
+        const txHistoryRaw = txHistoryRes.data;
+        const chainlogsRaw = chainlogsRes.data;
+
+        const healthOk = !!(healthRaw && (healthRaw.ok === true || healthRaw.status === "ok" || healthRaw.healthy === true));
+        const protectedOk = statusRes.ok || walletRes.ok || txHistoryRes.ok;
+        const status = statusRaw || {};
+        const wallet = walletRaw || {};
+        const txHistory = txHistoryRaw || {};
+
+        renderMetrics(status, healthOk, txHistory);
+        renderGovernance(status, txHistory);
+        renderVault(wallet);
+
+        const found = new Set();
+        extractDigests(status, found);
+        extractDigests(auditRaw || {}, found);
+        extractDigests(txHistory || {}, found);
+        extractDigests(chainlogsRaw || {}, found);
+        [...found].forEach((d) => {
+          if (d && d.length >= 43 && d.length <= 45) digestMap.set(d, { digest: d, at: Date.now() });
+        });
+        digestMap.forEach((v, k) => { if (Date.now() - v.at > 60 * 60 * 1000) digestMap.delete(k); });
+        renderDigests();
+
+        if (protectedOk) {
+          setGatewayState("online", true);
+          logLine("ok", "Dashboard refreshed from protected endpoints");
+        } else if (healthOk) {
+          setGatewayState("degraded", false);
+          logLine("bad", "Gateway health is up, but protected endpoints failed. Check plugin key.");
+        } else {
+          setGatewayState("offline", false);
+          logLine("bad", "Gateway unreachable or blocked by CORS/network.");
+        }
+
+        if (!statusRes.ok) logLine("bad", `status error: ${statusRes.error}`);
+        if (!walletRes.ok) logLine("bad", `wallet error: ${walletRes.error}`);
+        if (!txHistoryRes.ok) logLine("bad", `tx-history error: ${txHistoryRes.error}`);
+      } catch (err) {
+        setGatewayState("offline", false);
+        logLine("bad", `Refresh failed: ${err.message}`);
+      }
+    }
+
+    $("gateway-preset").addEventListener("change", (e) => { $("gateway-url").value = e.target.value; });
+    $("gateway-apply").addEventListener("click", () => { applyGateway($("gateway-url").value); refresh(); });
+
+    applyGateway(baseUrl);
+    const preset = $("gateway-preset");
+    if ([...preset.options].some((o) => o.value === baseUrl)) preset.value = baseUrl;
+    refresh();
+    setInterval(refresh, 12000);
+  </script>
+</body>
+</html>

@@ -1,112 +1,112 @@
 # Security Policy
 
-This document defines ClawAll's security model, trust boundaries, and operational controls.
+ClawAll applies fail-closed controls for autonomous agent execution on Sui. This document defines security objectives, trust boundaries, required controls, and incident handling.
 
-## 1) Security objectives
+## Security Objectives
 
 ClawAll is designed to enforce the following invariants:
 
-1. No blockchain transfer executes without passing policy and audit gates.
-2. High-risk actions require explicit human governance approval.
+1. No protected transfer executes unless policy and audit gates pass.
+2. Medium/high-risk actions require governance approval.
 3. Policy tampering triggers freeze before execution.
-4. Runtime host cannot safely hold policy-admin capability.
-5. Transfer bounds are enforced on-chain by Move.
+4. Runtime and policy-admin authority remain split (no shared custody).
+5. Transfer limits are enforced on-chain by Move constraints.
 
-## 2) Trust model
+## Trust Model
 
-### Trusted operators
+### Trusted Operators
 
-- Allowlisted Telegram operators (`TG_OPERATOR_IDS`, `TG_OPERATOR_USERNAMES`)
-- Holder of `GuardCap` for runtime constraint minting
-- Holder of `PolicyAdminCap` for policy anchor and global freeze administration
+- Allowlisted operators (`TG_OPERATOR_IDS`, `TG_OPERATOR_USERNAMES`)
+- Runtime holder of `GuardCap` for constraint-minted execution
+- Policy-admin holder of `PolicyAdminCap` for anchor/freeze governance
 
-### Partially trusted infrastructure
+### Partially Trusted Infrastructure
 
-- Telegram API transport
-- Sui fullnode RPC
-- Walrus publisher/aggregator availability
+- Telegram transport
+- Sui RPC infrastructure
+- Walrus availability
 
-### Untrusted inputs
+### Untrusted Inputs
 
-- Agent-generated intent payloads
-- Prompt/web/email external content
-- Non-allowlisted users interacting with bot endpoints
+- Agent-generated intents
+- External content (prompt/web/email)
+- Non-allowlisted users and callback payloads
 
-## 3) Control stack
+## Control Stack
 
-### Runtime controls
+### Runtime Controls
 
-- Intent firewall for malformed or dangerous actions
-- OS policy firewall (command/path/egress constraints)
+- Intent firewall for malformed/dangerous actions
+- OS policy firewall (command/path/egress restrictions)
 - Prompt quarantine with explicit operator release
-- Sequence firewall for cross-domain suspicious behavior
-- Risk engine + policy engine
-- Telegram approval for medium/high risk paths
-- Kill-switch persistence and cross-domain containment
+- Sequence firewall for suspicious cross-domain behavior
+- Risk scoring and policy decisioning
+- Governance approval gate for elevated-risk actions
+- Kill-switch persistence and containment behavior
 
-### Integrity controls
+### Integrity Controls
 
-- Policy signature verification (`POLICY_INTEGRITY_MODE`)
-- On-chain policy hash anchor verification (`POLICY_ANCHOR_MODE`)
+- Signed policy verification (`POLICY_INTEGRITY_MODE`)
+- On-chain anchor hash verification (`POLICY_ANCHOR_MODE`)
 - Runtime cap isolation guard (`ENFORCE_CAP_ISOLATION=1`)
 
-### On-chain controls (Move)
+### On-Chain Controls (Move)
 
 - Recipient binding
 - Amount cap
-- Expiry check
+- Expiry window validation
 - Metadata bounds checks
-- `GlobalFreeze` state check inside `execute_transfer`
+- `GlobalFreeze` check inside transfer execution
 
-### Audit controls
+### Audit Controls
 
 - Walrus proposal upload required before execution
-- Fail-closed behavior when audit write fails
-- OS security event mirroring to Walrus Quilt (best effort)
+- Fail-closed behavior on audit write failure
+- OS security mirroring to Walrus Quilt (best effort)
 
-## 4) High-risk scenarios and outcomes
+## Threat Outcomes
 
-| Scenario | Expected outcome |
+| Scenario | Expected Outcome |
 |---|---|
-| Agent submits destructive OS command | Blocked at firewall; may trigger freeze |
-| Agent submits high-risk transfer | Requires human approval |
-| Walrus audit write fails | Transfer blocked (`AUDIT` layer) |
-| Policy files changed without re-signing | Blocked + frozen (`POLICY_INTEGRITY`) |
-| On-chain policy hash mismatches local policy | Blocked + frozen (`POLICY_ANCHOR`) |
-| Runtime accidentally has `POLICY_CAP_ID` | Blocked + frozen (`CAP_ISOLATION`) |
-| On-chain freeze set by policy-admin | Transfer aborts on-chain |
+| Destructive OS command | Blocked by firewall; may trigger freeze |
+| High-risk transfer | Approval required |
+| Walrus write failure | Blocked at `AUDIT` layer |
+| Policy tamper without re-sign | Blocked + frozen (`POLICY_INTEGRITY`) |
+| Anchor mismatch | Blocked + frozen (`POLICY_ANCHOR`) |
+| Runtime has `POLICY_CAP_ID` | Blocked + frozen (`CAP_ISOLATION`) |
+| On-chain freeze active | Transfer aborts on-chain |
 
-## 5) Deployment requirements
+## Deployment Requirements
 
-### Mandatory split custody
+### Mandatory Split Custody
 
-- Runtime wallet: owns `GuardCap` only.
-- Policy-admin wallet: owns `PolicyAdminCap` and `GlobalFreeze`.
-- Runtime `.env` must have empty `POLICY_CAP_ID`.
+- Runtime wallet: operational authority only (`GuardCap` path)
+- Policy-admin wallet: governance authority (`PolicyAdminCap`)
+- Runtime `.env` must keep `POLICY_CAP_ID=` empty
 
-### Mandatory runtime configuration
+### Mandatory Runtime Configuration
 
 - `POLICY_INTEGRITY_MODE=strict`
 - `POLICY_ANCHOR_MODE=strict`
 - `ENFORCE_CAP_ISOLATION=1`
 - `FREEZE_STATE_ID=<global_freeze_object_id>`
 
-## 6) Incident response
+## Incident Response
 
-1. Engage freeze (`/freeze` and/or `policy:freeze`).
-2. Rotate compromised secrets.
-3. Review `/chainlogs`, `/tx`, `/oslogs`, `/osproof`.
-4. Generate forensic bundle (`npm run forensics:bundle`).
-5. Patch and verify (`npm test`, `sui move build`).
-6. Resume only after human validation (`/resume` or `policy:unfreeze`).
+1. Engage freeze (`/freeze` and/or policy freeze command).
+2. Stop runtime-facing execution paths.
+3. Audit `/chainlogs`, `/tx`, `/oslogs`, and proof artifacts.
+4. Rotate compromised keys/secrets.
+5. Re-verify integrity, anchor, and test matrix.
+6. Resume only after operator validation.
 
-## 7) Security issue reporting
+## Vulnerability Reporting
 
-Do not disclose exploitable vulnerabilities publicly.
+Do not disclose exploitable details publicly.
 
 Report privately with:
 
-- Impact and affected path
-- Repro steps
-- Evidence/logs
-- Suggested mitigation (if available)
+- Impact and affected component
+- Reproduction steps
+- Relevant evidence/logs
+- Proposed mitigation (if available)

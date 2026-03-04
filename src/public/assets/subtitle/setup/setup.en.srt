@@ -1,0 +1,92 @@
+1
+00:00:00,933 --> 00:00:04,366
+I’m in the project terminal, ready to start the setup.
+
+2
+00:00:06,033 --> 00:00:14,699
+I run a quick masked key check to confirm "ADMIN_PK" and "AGENT_PK" are loaded, without revealing full private keys.
+
+3
+00:00:17,400 --> 00:00:21,833
+Then I open a new terminal tab and go to chain/sui.
+
+4
+00:00:23,200 --> 00:00:26,366
+I run "sui client publish" and wait for it to finish.
+
+5
+00:00:39,933 --> 00:00:45,133
+Once deployment completes, I copy the package ID for the next steps.
+
+6
+00:00:45,866 --> 00:00:48,566
+Next, I run "npm run setup".
+
+7
+00:00:50,433 --> 00:00:56,300
+It auto-loads the Sui private key from environment variables, so I just press Enter.
+
+8
+00:00:56,633 --> 00:01:02,966
+Then I paste the package ID I copied earlier, and the agent key is also loaded from env.
+
+9
+00:01:07,666 --> 00:01:15,366
+At this point we’re in the vault funding/top-up phase where we load funds into the vault for later agent use.
+
+10
+00:01:30,500 --> 00:01:38,666
+At this step, I complete the vault top-up by adding the coins and amounts I need, then enter 0 to finish.
+
+11
+00:01:39,600 --> 00:01:45,933
+I confirm with Y to continue strict policy setup, and then setup proceeds automatically.
+
+12
+00:01:47,500 --> 00:01:52,466
+After that, runtime setup runs and installs/refreshes the plugin.
+
+13
+00:01:53,200 --> 00:01:58,566
+I press Yes here to show the config step and confirm the runtime values.
+
+14
+00:02:00,400 --> 00:02:06,800
+You can add the Telegram bot token and chat ID here as part of the .env configuration.
+
+15
+00:02:07,166 --> 00:02:15,066
+After that, you can set an authorized Telegram username or user ID, so only approved accounts can trigger actions.
+
+16
+00:02:16,233 --> 00:02:21,733
+You can also set these optional configurations here, based on your setup needs.
+
+17
+00:02:23,600 --> 00:02:33,333
+Then setup completes the full flow and runs verification checks, including a wallet fetch, to confirm everything is configured correctly.
+
+18
+00:02:37,133 --> 00:02:42,033
+After that, we also run "openclaw clawall wallet" to confirm it manually.
+
+19
+00:02:44,733 --> 00:02:50,000
+You can run "openclaw clawall -h" to see all available commands.
+
+20
+00:02:55,166 --> 00:03:01,133
+To uninstall Clawall cleanly, run "npm run uninstall:clawall".
+
+21
+00:03:05,433 --> 00:03:12,633
+Then it uninstalls the plugin through OpenClaw, restarts the gateway, and performs cleanup.
+
+22
+00:03:14,400 --> 00:03:19,533
+We’ll also do a manual restart afterward to make sure everything is fully refreshed.
+
+23
+00:03:30,200 --> 00:03:33,799
+And that’s it, your Clawall setup is complete and ready to use.
+

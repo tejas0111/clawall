@@ -12,7 +12,6 @@ import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
 const RPC_URL = process.env.RPC_URL ?? 'https://fullnode.testnet.sui.io:443';
 const client = new SuiJsonRpcClient({ url: RPC_URL });
 const NODE_BIN = process.execPath;
-const NPM_BIN = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 async function sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
 
@@ -566,12 +565,12 @@ async function main() {
     if (args.noRuntimePrompt) {
       console.log('[setup] Skipping runtime + plugin prompt (--no-runtime-prompt).');
     } else {
-      const runSetupAnswer = await rl.question('Run runtime + plugin setup now (npm run setup:runtime)? [Y/n]: ');
+      const runSetupAnswer = await rl.question('Run runtime + plugin setup now? [Y/n]: ');
       if (isYes(runSetupAnswer, true)) {
-        runOrThrow(NPM_BIN, ['run', 'setup:runtime']);
+        runOrThrow(NODE_BIN, ['src/scripts/setup.mjs']);
         console.log('[setup] Runtime + plugin setup completed.');
       } else {
-        console.log('[setup] Skipped npm run setup:runtime.');
+        console.log('[setup] Skipped runtime + plugin setup.');
       }
     }
 
@@ -580,6 +579,7 @@ async function main() {
 
   } catch (err) {
     console.error(`\nFAILED: ${err.message}`);
+    process.exitCode = 1;
   } finally {
     rl.close();
   }

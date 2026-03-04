@@ -1,7 +1,7 @@
 {
   "schema": "clawall/policy-signature-v1",
   "sha256": "7ac38d4075ba1dcc4bb0b88c45daeaf5371765888d592cfe12525e37d84d1257",
-  "generated_at": "2026-03-02T16:50:44.920Z",
+  "generated_at": "2026-03-04T01:28:22.111Z",
   "generated_by": "clawall-setup",
   "files": [
     "src/orchestrator/intent-orchestrator.mjs",

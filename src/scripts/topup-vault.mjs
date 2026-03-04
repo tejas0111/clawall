@@ -99,7 +99,7 @@ async function depositIntoVault({
 async function main() {
   const rl = readline.createInterface({ input, output });
   console.log('\n=== ClawAll Vault Top-Up ===');
-  console.log('(Fast vault funding only. Use `npm run admin` for full bootstrap.)\n');
+  console.log('(Fast vault funding only. Use `npm run setup` for full bootstrap.)\n');
 
   try {
     const detectedAdminPrivKey = firstNonEmpty(

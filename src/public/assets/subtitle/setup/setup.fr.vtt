@@ -1,0 +1,70 @@
+WEBVTT
+
+00:00:00.933 --> 00:00:04.366
+Je suis dans le terminal du projet, prêt à démarrer la configuration.
+
+00:00:06.033 --> 00:00:14.699
+J’exécute une vérification rapide des clés masquées pour confirmer que "ADMIN_PK" et "AGENT_PK" sont chargées, sans révéler les clés privées complètes.
+
+00:00:17.400 --> 00:00:21.833
+Ensuite, j’ouvre un nouvel onglet terminal et je vais dans chain/sui.
+
+00:00:23.200 --> 00:00:26.366
+Je lance "sui client publish" et j’attends la fin.
+
+00:00:39.933 --> 00:00:45.133
+Une fois le déploiement terminé, je copie le package ID pour les étapes suivantes.
+
+00:00:45.866 --> 00:00:48.566
+Puis j’exécute "npm run setup".
+
+00:00:50.433 --> 00:00:56.300
+La clé privée Sui est chargée automatiquement depuis les variables d’environnement, donc j’appuie simplement sur Entrée.
+
+00:00:56.633 --> 00:01:02.966
+Ensuite je colle le package ID copié plus tôt, et la clé agent est également chargée depuis env.
+
+00:01:07.666 --> 00:01:15.366
+À ce stade, nous sommes dans la phase de financement/top-up du vault, où nous chargeons des fonds pour un usage agent ultérieur.
+
+00:01:30.500 --> 00:01:38.666
+À cette étape, je termine le top-up du vault en ajoutant les coins et montants nécessaires, puis je saisis 0 pour terminer.
+
+00:01:39.600 --> 00:01:45.933
+Je confirme avec Y pour continuer la configuration de politique stricte, puis le setup continue automatiquement.
+
+00:01:47.500 --> 00:01:52.466
+Après cela, la configuration runtime s’exécute et installe/rafraîchit le plugin.
+
+00:01:53.200 --> 00:01:58.566
+J’appuie sur Yes ici pour afficher l’étape de config et confirmer les valeurs runtime.
+
+00:02:00.400 --> 00:02:06.800
+Vous pouvez ajouter ici le token du bot Telegram et le chat ID dans la configuration .env.
+
+00:02:07.166 --> 00:02:15.066
+Ensuite, vous pouvez définir un nom d’utilisateur Telegram autorisé ou un user ID, afin que seuls les comptes approuvés puissent déclencher des actions.
+
+00:02:16.233 --> 00:02:21.733
+Vous pouvez aussi définir ces configurations optionnelles ici selon vos besoins.
+
+00:02:23.600 --> 00:02:33.333
+Puis le setup termine le flux complet et lance les vérifications, y compris une récupération du wallet, pour confirmer que tout est correctement configuré.
+
+00:02:37.133 --> 00:02:42.033
+Après cela, nous exécutons aussi "openclaw clawall wallet" pour confirmer manuellement.
+
+00:02:44.733 --> 00:02:50.000
+Vous pouvez exécuter "openclaw clawall -h" pour voir toutes les commandes disponibles.
+
+00:02:55.166 --> 00:03:01.133
+Pour désinstaller Clawall proprement, exécutez "npm run uninstall:clawall".
+
+00:03:05.433 --> 00:03:12.633
+Ensuite, il désinstalle le plugin via OpenClaw, redémarre le gateway et effectue le nettoyage.
+
+00:03:14.400 --> 00:03:19.533
+Nous ferons aussi un redémarrage manuel ensuite pour garantir un rafraîchissement complet.
+
+00:03:30.200 --> 00:03:33.799
+Et voilà, votre configuration Clawall est terminée et prête à l’emploi.

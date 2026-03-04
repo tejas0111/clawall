@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { stopGateway } from './gateway-runtime-utils.mjs';
 
 const ROOT = process.cwd();
+const NODE_BIN = process.execPath;
 const OPENCLAW_BIN = process.env.OPENCLAW_BIN || (process.platform === 'win32' ? 'openclaw.cmd' : 'openclaw');
 const PLUGIN_ID = 'clawall-security';
 
@@ -30,6 +32,15 @@ const OPENCLAW_AGENTS_FILE = path.resolve(HOME, '.openclaw', 'AGENTS.md');
 function run(command, args, options = {}) {
   const result = spawnSync(command, args, { stdio: 'inherit', ...options });
   return result.status ?? 1;
+}
+
+function removeGatewayServiceBestEffort() {
+  const code = run(NODE_BIN, ['src/scripts/setup-service.mjs', 'remove'], { cwd: ROOT });
+  if (code === 0) {
+    console.log('[uninstall] gateway auto-start service removed.');
+  } else {
+    console.log('[uninstall] gateway auto-start service not removed (not installed or unsupported host).');
+  }
 }
 
 function loadOpenClawConfig() {
@@ -91,6 +102,9 @@ function removeExtensionPath() {
 
 function main() {
   console.log('\n=== ClawAll Uninstall + Cleanup ===');
+  console.log('[uninstall] stopping local gateway process (if running)...');
+  stopGateway();
+  removeGatewayServiceBestEffort();
   console.log(`[uninstall] attempting: ${OPENCLAW_BIN} plugins uninstall ${PLUGIN_ID}`);
   const uninstallCode = run(OPENCLAW_BIN, ['plugins', 'uninstall', PLUGIN_ID], { cwd: ROOT });
   if (uninstallCode !== 0) {

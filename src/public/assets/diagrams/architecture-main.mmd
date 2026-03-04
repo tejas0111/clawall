@@ -1,0 +1,105 @@
+flowchart TD
+    AGENT(["🤖 AI Agent · OpenClaw"])
+
+    subgraph PIPELINE ["  Enforcement Pipeline  "]
+        direction TB
+
+        FW["**01 · Intent Firewall**
+        ─────────────────────
+        Blocks: rm -rf · domain escalation
+        script injection · malformed payloads
+        ━━ Fail-closed · explicit deny reasons"]
+
+        RISK["**02 · Risk Engine**
+        ─────────────────────
+        Signals: value · velocity · recipient novelty
+        burst behavior · cross-domain flags
+        ━━ Score: 0 – 100"]
+
+        POLICY["**03 · Policy Engine**
+        ─────────────────────
+        0–39 → ALLOW
+        40–69 → ALERT + Telegram notify
+        70–100 → REQUIRE APPROVAL or BLOCK
+        ━━ Hash-verified policy bundle"]
+
+        GOV["**04 · Telegram Governance**
+        ─────────────────────
+        Operators: /approve · /freeze · /resume
+        ━━ Human-in-the-loop gate
+        ━━ Fail-closed if Telegram unavailable"]
+
+        INTEGRITY["**05 · Policy Integrity & Audit**
+        ─────────────────────
+        SHA-256 re-hash on every startup
+        Walrus decentralized audit write
+        ━━ No proof → no execution"]
+    end
+
+    subgraph CHAIN ["  On-Chain Enforcement · Sui Move  "]
+        direction LR
+
+        CONSTRAINT["**TransferConstraint**
+        max_amount
+        allowed_recipient
+        expiry_ms"]
+
+        GFREEZE["**GlobalFreeze**
+        Survives restarts
+        Runtime cannot bypass"]
+
+        ANCHOR["**PolicyAnchor**
+        On-chain SHA-256
+        of policy bundle"]
+    end
+
+    subgraph CUSTODY ["  Split Custody  "]
+        direction LR
+        GUARD["GuardCap
+        Runtime only
+        mints constraints"]
+        ADMIN["PolicyAdminCap
+        Admin wallet only
+        sets anchor · manages freeze"]
+    end
+
+    BLOCKED(["❌ BLOCKED"])
+    EXECUTED(["✅ EXECUTED + Digest"])
+
+    %% Main pipeline flow
+    AGENT -->|"intent"| FW
+    FW -->|"❌ unsafe"| BLOCKED
+    FW -->|"✅ pass"| RISK
+    RISK --> POLICY
+    POLICY -->|"❌ block"| BLOCKED
+    POLICY -->|"approval needed"| GOV
+    POLICY -->|"✅ allow"| INTEGRITY
+    GOV -->|"❌ denied / timeout"| BLOCKED
+    GOV -->|"✅ approved"| INTEGRITY
+    INTEGRITY -->|"❌ tamper / audit fail"| BLOCKED
+    INTEGRITY -->|"✅ verified"| CONSTRAINT
+
+    %% On-chain
+    GFREEZE -->|"gate"| CONSTRAINT
+    ANCHOR -.->|"verify hash"| INTEGRITY
+    CONSTRAINT -->|"on-chain exec"| EXECUTED
+
+    %% Custody links
+    GUARD -.->|"mints"| CONSTRAINT
+    ADMIN -.->|"controls"| GFREEZE
+    ADMIN -.->|"anchors"| ANCHOR
+
+    %% Styles
+    classDef pipeline fill:#140800,stroke:#ff4500,stroke-width:1.5px,color:#f0c89a
+    classDef chain    fill:#07101e,stroke:#4d8fff,stroke-width:1.5px,color:#aac8ff
+    classDef custody  fill:#0d0d0d,stroke:#555555,stroke-width:1px,color:#888888
+    classDef agent    fill:#1a0500,stroke:#ff4500,stroke-width:2px,color:#ffffff,font-weight:bold
+    classDef blocked  fill:#1a0000,stroke:#ff3333,stroke-width:1.5px,color:#ff8080
+    classDef executed fill:#001a08,stroke:#00cc55,stroke-width:1.5px,color:#66ffaa
+
+    class FW,RISK,POLICY,GOV,INTEGRITY pipeline
+    class CONSTRAINT,GFREEZE,ANCHOR chain
+    class GUARD,ADMIN custody
+    class AGENT agent
+    class BLOCKED blocked
+    class EXECUTED executed

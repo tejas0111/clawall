@@ -152,7 +152,7 @@ function printManualFallback() {
   console.log('\nAutomatic service setup is unavailable on this host.');
   console.log('Use manual startup command:');
   console.log(`  ${start}`);
-  console.log("Or keep using `npm run setup:runtime` when needed.");
+  console.log("Or run full setup anytime with `npm run setup`.");
 }
 
 function usage() {

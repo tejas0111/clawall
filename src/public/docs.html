@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClawAll Docs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    body.docs-page {
+      background:
+        radial-gradient(1200px 600px at 85% -10%, rgba(255,69,0,0.12), transparent 60%),
+        radial-gradient(900px 420px at -20% 10%, rgba(0,212,255,0.08), transparent 55%),
+        var(--black);
+    }
+    .docs-shell {
+      max-width: 1380px;
+      margin: 120px auto 60px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr) 220px;
+      gap: 28px;
+      align-items: start;
+    }
+    .docs-toc {
+      position: sticky;
+      top: 88px;
+      align-self: start;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255, 69, 0, 0.08), rgba(8, 11, 18, 0.95));
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 14px 26px rgba(0,0,0,0.28);
+    }
+    .docs-toc h3 {
+      color: var(--white);
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .docs-topic-group {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .docs-topic-group:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+    .docs-topic-title {
+      font-size: 0.66rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .docs-toc a {
+      display: block;
+      color: var(--body);
+      text-decoration: none;
+      font-size: 0.8rem;
+      padding: 10px 8px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: 180ms ease;
+    }
+    .docs-toc a:hover {
+      background: rgba(255, 69, 0, 0.12);
+      color: var(--white);
+    }
+    .docs-toc a.active {
+      color: var(--white);
+      background: rgba(255, 69, 0, 0.16);
+      border-color: rgba(255, 69, 0, 0.45);
+    }
+    .docs-main section {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 20px 32px rgba(0, 0, 0, 0.22);
+      position: relative;
+      animation: panelIn 220ms ease;
+    }
+    .docs-main section::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(255,69,0,0.8), rgba(255,69,0,0));
+    }
+    .docs-main {
+      min-width: 0;
+    }
+    .docs-intro {
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(255, 69, 0, 0.12), rgba(10, 14, 24, 0.94));
+      border-radius: 12px;
+      padding: 20px 24px;
+      box-shadow: 0 20px 34px rgba(0,0,0,0.25);
+    }
+    .docs-intro h1 {
+      color: var(--white);
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+    .docs-intro p {
+      color: var(--body);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      max-width: 820px;
+      margin: 0;
+    }
+    .docs-intro-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .docs-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255,69,0,0.4);
+      color: var(--white);
+      background: rgba(255,69,0,0.12);
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .docs-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(255,69,0,0.8);
+    }
+    .docs-intro-actions {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+    }
+    .docs-action {
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(11,14,22,0.8);
+      padding: 10px 12px;
+      transition: border-color 0.2s, transform 0.2s;
+      min-width: 0;
+    }
+    .docs-action:hover {
+      border-color: rgba(255,69,0,0.45);
+      transform: translateY(-1px);
+    }
+    .docs-action strong {
+      display: block;
+      font-size: 0.76rem;
+      color: var(--white);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .docs-action span {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 5px;
+      overflow-wrap: anywhere;
+    }
+    .docs-main h1 {
+      color: var(--white);
+      font-family: 'Syne', sans-serif;
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+    .docs-main h2 {
+      color: var(--white);
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      scroll-margin-top: 96px;
+    }
+    .docs-main p, .docs-main li {
+      color: var(--body);
+      font-size: 0.9rem;
+      line-height: 1.78;
+    }
+    .docs-main h3 {
+      color: var(--white);
+      font-size: 0.85rem;
+      margin: 16px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      scroll-margin-top: 96px;
+    }
+    .docs-main ul { padding-left: 18px; }
+    .docs-main ol { padding-left: 20px; }
+    .docs-main code {
+      overflow-wrap: anywhere;
+    }
+    .docs-main pre {
+      background: #0b0d13;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 36px 12px 12px;
+      overflow: auto;
+      color: var(--light);
+      font-size: 0.82rem;
+      line-height: 1.6;
+      position: relative;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    .docs-main pre::before {
+      content: 'shell';
+      position: absolute;
+      left: 12px;
+      top: 9px;
+      color: var(--muted);
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .docs-main pre code {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .docs-meta {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-bottom: 12px;
+    }
+    .docs-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .docs-kpi {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(11, 14, 22, 0.85);
+      padding: 12px;
+      transition: transform 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .docs-kpi:hover {
+      transform: translateY(-1px);
+      border-color: rgba(255,69,0,0.4);
+      background: rgba(255,69,0,0.08);
+    }
+    .docs-kpi strong {
+      display: block;
+      font-size: 0.92rem;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+    .docs-kpi span {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    .docs-note {
+      border: 1px solid rgba(255, 69, 0, 0.35);
+      background: rgba(255, 69, 0, 0.08);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 0.82rem;
+      margin: 12px 0;
+      color: var(--light);
+    }
+    .docs-callout {
+      border: 1px solid var(--border);
+      border-left: 3px solid rgba(255, 69, 0, 0.75);
+      background: rgba(12, 15, 24, 0.92);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 12px 0;
+      color: var(--body);
+      font-size: 0.83rem;
+      line-height: 1.65;
+    }
+    .docs-callout strong {
+      color: var(--white);
+    }
+    .docs-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 10px 0 4px;
+    }
+    .docs-mini {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: rgba(11, 14, 22, 0.86);
+      padding: 10px;
+      font-size: 0.8rem;
+      color: var(--body);
+      line-height: 1.6;
+    }
+    .docs-mini strong {
+      display: block;
+      color: var(--white);
+      margin-bottom: 4px;
+      font-size: 0.79rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .docs-step {
+      border: 1px dashed rgba(255, 69, 0, 0.4);
+      border-radius: 8px;
+      padding: 10px;
+      margin: 8px 0;
+      background: rgba(255, 69, 0, 0.05);
+    }
+    .docs-setup-hero {
+      border: 1px solid rgba(255, 69, 0, 0.38);
+      background: linear-gradient(135deg, rgba(255, 69, 0, 0.12), rgba(11, 14, 22, 0.9));
+      border-radius: 10px;
+      padding: 12px;
+      margin: 10px 0 14px;
+      color: var(--light);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+    .docs-setup-hero strong {
+      color: var(--white);
+    }
+    .docs-step strong {
+      color: var(--white);
+    }
+    .docs-table-wrap {
+      margin-top: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    .docs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      min-width: 620px;
+    }
+    .docs-table th, .docs-table td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .docs-table th {
+      color: var(--white);
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .docs-table tbody tr:nth-child(even) {
+      background: rgba(255,255,255,0.02);
+    }
+    .docs-table tbody tr:hover {
+      background: rgba(255,69,0,0.07);
+    }
+    .docs-panel {
+      display: none;
+    }
+    .docs-panel.active {
+      display: block;
+    }
+    .docs-outline {
+      position: sticky;
+      top: 88px;
+      align-self: start;
+      border: 1px solid var(--border);
+      background: rgba(8, 11, 18, 0.9);
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 14px 26px rgba(0,0,0,0.24);
+    }
+    .docs-outline h3 {
+      color: var(--white);
+      font-size: 0.72rem;
+      margin: 0 0 8px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .docs-outline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .docs-outline-list a {
+      display: block;
+      text-decoration: none;
+      color: var(--body);
+      font-size: 0.74rem;
+      padding: 8px 8px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .docs-outline-list a:hover {
+      color: var(--white);
+      border-color: rgba(255,69,0,0.35);
+      background: rgba(255,69,0,0.1);
+    }
+    .docs-outline-list a.active {
+      color: var(--white);
+      border-color: rgba(255,69,0,0.45);
+      background: rgba(255,69,0,0.14);
+    }
+    .docs-outline-empty {
+      color: var(--muted);
+      font-size: 0.74rem;
+      line-height: 1.5;
+    }
+    .docs-copy-btn {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      border: 1px solid var(--border);
+      background: rgba(15,17,23,0.9);
+      color: var(--body);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 5px;
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+    }
+    .docs-copy-btn:hover {
+      color: var(--white);
+      border-color: rgba(255,69,0,0.4);
+      background: rgba(255,69,0,0.1);
+    }
+    .docs-copy-btn.copied {
+      border-color: rgba(0, 232, 122, 0.5);
+      color: var(--green);
+    }
+    .docs-arch-figure {
+      margin: 12px 0 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: rgba(11,14,22,0.9);
+      padding: 10px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.22);
+    }
+    .docs-arch-figure img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+    }
+    .docs-arch-cap {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-align: center;
+    }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 1180px) {
+      .docs-shell {
+        grid-template-columns: 260px minmax(0, 1fr);
+      }
+      .docs-outline {
+        display: none;
+      }
+    }
+    @media (max-width: 960px) {
+      .docs-shell {
+        grid-template-columns: 1fr;
+        margin-top: 96px;
+        padding: 0 16px;
+        gap: 14px;
+      }
+      .docs-toc { position: static; }
+      .docs-intro {
+        padding: 16px 18px;
+      }
+      .docs-main section {
+        padding: 18px;
+      }
+      .docs-kpi-grid {
+        grid-template-columns: 1fr;
+      }
+      .docs-intro-actions {
+        grid-template-columns: 1fr;
+      }
+      .docs-grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 640px) {
+      .docs-shell {
+        margin-top: 84px;
+        padding: 0 12px;
+      }
+      .docs-intro h1 {
+        font-size: 1.55rem;
+      }
+      .docs-main section {
+        padding: 14px;
+      }
+      .docs-toc a {
+        padding: 9px 7px;
+        font-size: 0.76rem;
+      }
+      .docs-main h2 {
+        font-size: 0.96rem;
+      }
+      .docs-main pre {
+        padding: 10px;
+        font-size: 0.78rem;
+        -webkit-overflow-scrolling: touch;
+      }
+      .docs-main pre::before {
+        display: none;
+      }
+      .docs-table-wrap {
+        -webkit-overflow-scrolling: touch;
+      }
+      .docs-copy-btn {
+        position: static;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body class="docs-page">
+
+<nav>
+  <a href="./index.html" class="nav-logo"><span class="logo-mark"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.2 7.8 8 9 4.8-1.2 8-4 8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span> <span>Claw</span>All</a>
+
+  <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navMenu">
+    <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h16"/>
+      <path d="M4 12h16"/>
+      <path d="M4 17h16"/>
+    </svg>
+  </button>
+
+  <ul class="nav-links">
+    <li><a href="./index.html#architecture">Architecture</a></li>
+    <li><a href="./index.html#layers">Security</a></li>
+    <li><a href="./index.html#demo">Demo</a></li>
+    <li><a href="./index.html#install">Install</a></li>
+    <li><a href="./docs.html">Docs</a></li>
+    <li>
+      <a href="https://github.com/tejas0111/clawall" target="_blank" class="nav-github">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        GitHub
+      </a>
+    </li>
+  </ul>
+
+  <div id="navMenu" class="nav-drawer" aria-hidden="true">
+    <a href="./index.html#architecture" class="nav-drawer-link">Architecture</a>
+    <a href="./index.html#layers" class="nav-drawer-link">Security</a>
+    <a href="./index.html#demo" class="nav-drawer-link">Demo</a>
+    <a href="./index.html#install" class="nav-drawer-link">Install</a>
+    <a href="./docs.html" class="nav-drawer-link">Docs</a>
+    <a href="https://github.com/tejas0111/clawall" target="_blank" class="nav-drawer-link">GitHub</a>
+  </div>
+</nav>
+
+<main class="docs-shell">
+  <aside class="docs-toc">
+    <h3>Documentation</h3>
+    <div class="docs-topic-group">
+      <p class="docs-topic-title">Foundations</p>
+      <a href="#overview" data-doc-link="overview">Overview</a>
+      <a href="#architecture" data-doc-link="architecture">Architecture & Concepts</a>
+      <a href="#threat" data-doc-link="threat">Threat Model & Policy Cap</a>
+      <a href="#controls" data-doc-link="controls">Control Matrix</a>
+    </div>
+    <div class="docs-topic-group">
+      <p class="docs-topic-title">Getting Started</p>
+      <a href="#setup" data-doc-link="setup">ClawAll Setup</a>
+      <a href="#testnet" data-doc-link="testnet">Testnet & Faucet</a>
+      <a href="#config" data-doc-link="config">Configuration</a>
+      <a href="#usage" data-doc-link="usage">Usage</a>
+    </div>
+    <div class="docs-topic-group">
+      <p class="docs-topic-title">Runtime APIs</p>
+      <a href="#price" data-doc-link="price">Price API</a>
+      <a href="#gateway" data-doc-link="gateway">Gateway API</a>
+    </div>
+  <div class="docs-topic-group">
+      <p class="docs-topic-title">Operations</p>
+      <a href="#dashboard-local" data-doc-link="dashboard-local">Local Dashboard</a>
+      <a href="#security" data-doc-link="security">Security</a>
+      <a href="#testing" data-doc-link="testing">Testing</a>
+      <a href="#judge" data-doc-link="judge">Judge Flow</a>
+      <a href="#faq" data-doc-link="faq">FAQ</a>
+      <a href="#troubleshooting" data-doc-link="troubleshooting">Troubleshooting</a>
+    </div>
+  </aside>
+
+  <div class="docs-main">
+    <div class="docs-intro">
+      <div class="docs-intro-top">
+        <h1>ClawAll Docs</h1>
+        <span class="docs-badge"><span class="docs-badge-dot"></span> Runtime Guide</span>
+      </div>
+      <p>Operator handbook for gateway enforcement, governance controls, and Sui on-chain constraints. Select a section from the left to focus on one topic at a time.</p>
+      <div class="docs-intro-actions">
+        <a class="docs-action" href="#threat">
+          <strong>Threat Model</strong>
+          <span>In-scope attacker behaviors and trust boundaries.</span>
+        </a>
+        <a class="docs-action" href="#controls">
+          <strong>Control Matrix</strong>
+          <span>Threat-to-control mapping by enforcement layer.</span>
+        </a>
+        <a class="docs-action" href="#testing">
+          <strong>Testing Matrix</strong>
+          <span>Automated checks plus manual validation flow.</span>
+        </a>
+        <a class="docs-action" href="#testnet">
+          <strong>Faucet Guide</strong>
+          <span>End-to-end testnet prep and funding checks.</span>
+        </a>
+      </div>
+    </div>
+
+    <section id="overview" class="docs-panel active" data-doc-panel="overview">
+      <h2>Overview</h2>
+      <div class="docs-meta">Production-style AI wallet security for Sui: runtime controls + governance approvals + on-chain constraints.</div>
+      <h3>What ClawAll Is</h3>
+      <p>ClawAll is a security-focused execution layer for OpenClaw. It translates user or agent requests into deterministic policy-checked actions, then enforces those actions using both off-chain controls and on-chain Move constraints. The design target is to survive realistic compromise scenarios without allowing silent fund drain.</p>
+      <h3>What ClawAll Is Not</h3>
+      <ul>
+        <li>Not a pure wallet UI. It is a policy gateway with a wallet interface.</li>
+        <li>Not trust-me middleware. It is fail-closed by default for protected actions.</li>
+        <li>Not only prompt-level safety. Security survives outside model behavior via Move checks.</li>
+      </ul>
+      <h3>Core Guarantees</h3>
+      <ul>
+        <li>Intent firewall protects command and transfer pathways before execution.</li>
+        <li>Risk engine and policy engine can require operator approval before funds move.</li>
+        <li>Move-level <code>TransferConstraint</code> + <code>GlobalFreeze</code> provide on-chain final enforcement.</li>
+        <li>Policy integrity checks block if runtime code hash mismatches expected policy bundle.</li>
+        <li>Optional policy anchor checks tie runtime policy hash to an on-chain anchor object.</li>
+        <li>Sui-native vault path supports <code>0x2::sui::SUI</code> and additional coin types held by the vault.</li>
+      </ul>
+      <h3>Quick Start Roles</h3>
+      <div class="docs-grid-2">
+        <div class="docs-mini">
+          <strong>Agent Runtime</strong>
+          Runs OpenClaw + ClawAll gateway and holds only operational authority (<code>GuardCap</code>, not policy-admin authority).
+        </div>
+        <div class="docs-mini">
+          <strong>Admin Wallet</strong>
+          Used only during setup/governance operations to anchor policy and manage freeze state. Private key is not persisted by setup.
+        </div>
+      </div>
+      <h3>Operational Signals</h3>
+      <div class="docs-kpi-grid">
+        <div class="docs-kpi">
+          <strong>Fail-Closed</strong>
+          <span>No protected execution when policy/audit checks fail.</span>
+        </div>
+        <div class="docs-kpi">
+          <strong>Deterministic Routes</strong>
+          <span>Slash commands map directly to gateway endpoints.</span>
+        </div>
+        <div class="docs-kpi">
+          <strong>On-Chain Gate</strong>
+          <span>Move layer enforces freeze and transfer constraints.</span>
+        </div>
+      </div>
+      <div class="docs-note"><strong>Judge summary:</strong> ClawAll secures autonomous transfers by requiring off-chain intent correctness and on-chain constraint correctness at the same time.</div>
+    </section>
+
+    <section id="architecture" class="docs-panel" data-doc-panel="architecture">
+      <h2>Architecture & Core Concepts</h2>
+      <div class="docs-meta">Deep-dive into intent orchestration, security pipelines, and the fail-closed design.</div>
+      <figure class="docs-arch-figure">
+        <img src="assets/diagrams/architecture-main.svg" alt="ClawAll architecture flow diagram: intent firewall, risk engine, policy, governance, integrity checks, and on-chain enforcement." loading="lazy" />
+        <figcaption class="docs-arch-cap">ClawAll end-to-end enforcement flow (runtime + on-chain + split custody).</figcaption>
+      </figure>
+      
+      <h3>1. The Intent Orchestration Pipeline</h3>
+      <p>ClawAll treats every action as an <strong>Intent</strong>. An intent is a structured object containing the domain (OS, FS, BROWSER, BLOCKCHAIN), the requested action, parameters, and provenance metadata. This allows for a unified security pipeline where cross-domain signals can trigger global safety responses.</p>
+      <pre><code>[ Intent ] -> [ Intent Firewall ] -> [ Risk Engine ] -> [ Policy Engine ] -> [ Execution ]</code></pre>
+      <div class="docs-callout"><strong>Design reason:</strong> A single intent pipeline prevents "safe in one module, unsafe in another" drift. Risk and policy become centralized and auditable.</div>
+      
+      <h3>2. Defense-in-Depth Layers</h3>
+      <ul>
+        <li><strong>Intent Firewall:</strong> Performs static analysis on the intent. For OS commands, it uses a custom shell tokenizer to prevent injection and restricts execution to a strict allow-list of binaries. For blockchain, it validates basic constraints like amount and recipient format.</li>
+        <li><strong>Risk Engine:</strong> Calculates a dynamic risk score (0-100) based on velocity, cumulative spend, recipient novelty, and prior suspicious behavior. It correlates OS-level signals (like a blocked command) to escalate blockchain-level risk.</li>
+        <li><strong>Policy Engine:</strong> Maps risk scores to enforcement actions: <code>ALLOW</code>, <code>BLOCK</code>, or <code>REQUIRE_APPROVAL</code>.</li>
+        <li><strong>On-Chain Enforcement (Move):</strong> Off-chain decisions are finalized by minting a <code>TransferConstraint</code> on Sui. This object binds the transaction to a specific <code>max_amount</code>, <code>allowed_recipient</code>, and <code>expiry_ms</code>, ensuring that even a compromised private key cannot deviate from the agent's authorized parameters.</li>
+      </ul>
+      <h3>3. Data Flow For Protected Transfer</h3>
+      <ol>
+        <li>User intent arrives via slash command or NL parsing.</li>
+        <li>Gateway resolves token symbol and base units.</li>
+        <li>Risk score and policy decision are computed.</li>
+        <li>If required, operator approval gate runs (Telegram workflow).</li>
+        <li>Constraint is prepared and signed route executes transaction.</li>
+        <li>Audit proof is generated and attached to result metadata.</li>
+      </ol>
+
+      <h3>4. Policy Cap Isolation & Integrity</h3>
+      <p>ClawAll implements a <strong>Split-Custody Trust Model</strong>. The runtime agent only holds a <code>GuardCap</code>, which allows it to mint constraints but <em>not</em> to change the security policy. The <code>PolicyAdminCap</code> (held in separate cold/admin custody) is required to update the on-chain <strong>Policy Anchor</strong> (a hash of the authorized codebase) or to unfreeze the system via the <code>GlobalFreeze</code> gate.</p>
+
+      <h3>5. Fail-Closed Design</h3>
+      <p>Security is the priority. If any of the following occur, the system blocks execution:</p>
+      <ul>
+        <li><strong>Integrity Failure:</strong> Local code hash does not match the signed policy bundle.</li>
+        <li><strong>Anchor Failure:</strong> Signed policy hash does not match the on-chain <code>PolicyAnchor</code>.</li>
+        <li><strong>Audit Failure:</strong> Walrus upload for the transaction proposal fails.</li>
+        <li><strong>Freeze Active:</strong> Either the off-chain kill-switch or the on-chain <code>GlobalFreeze</code> is engaged.</li>
+      </ul>
+      <h3>6. Runtime/Chain Responsibility Split</h3>
+      <div class="docs-grid-2">
+        <div class="docs-mini">
+          <strong>Runtime Side</strong>
+          Parses intent, computes risk, requests approval, signs calls, writes audit.
+        </div>
+        <div class="docs-mini">
+          <strong>Chain Side</strong>
+          Enforces immutable transfer limits and freeze semantics that runtime cannot bypass.
+        </div>
+      </div>
+    </section>
+
+    <section id="threat" class="docs-panel" data-doc-panel="threat">
+      <h2>Threat Model & Policy Control</h2>
+      <div class="docs-meta">In-scope attack surfaces and the Policy Cap isolation model.</div>
+      
+      <h3>In-Scope Attacker Behaviors</h3>
+      <ul>
+        <li><strong>Prompt Injection:</strong> Malicious instructions hidden in web content or email.</li>
+        <li><strong>OS Escalation:</strong> Using authorized tools (curl/wget) to access sensitive paths or egress untrusted data.</li>
+        <li><strong>Drain Attacks:</strong> Rapid small-value transfers designed to bypass total-amount velocity checks.</li>
+        <li><strong>Policy Tamper:</strong> Attempting to modify off-chain security code to self-approve high-risk actions.</li>
+        <li><strong>Key Compromise:</strong> Using the agent's private key directly to bypass off-chain controls.</li>
+      </ul>
+      <h3>Out-of-Scope / Residual Risks</h3>
+      <ul>
+        <li>Compromise of both runtime key and admin wallet key at the same time.</li>
+        <li>Compromise of operator Telegram account without secondary governance controls.</li>
+        <li>Protocol-level risks in third-party tokens or external price feeds.</li>
+      </ul>
+
+      <h3>The Policy Cap Isolation (Sui Native)</h3>
+      <p>A central pillar of the security model is the <strong>Policy Cap</strong>. In a production deployment, the <code>PolicyAdminCap</code> is kept in a separate, secure wallet (not the running agent). The running agent only holds a <code>GuardCap</code>.</p>
+      <ul>
+        <li><strong>The Agent (GuardCap):</strong> Can only authorize transfers that <em>strictly match</em> constraints generated by the risk engine.</li>
+        <li><strong>The Admin (PolicyAdminCap):</strong> Required to update the on-chain <strong>Policy Anchor</strong> (the hash of authorized code) or toggle the <strong>Global Freeze</strong>.</li>
+        <li><strong>The Safety Lock:</strong> The system includes a <code>assertRuntimeCapIsolation</code> check that immediately freezes the agent if it detects the <code>PolicyAdminCap</code> ID in the runtime configuration, preventing an escalation of privilege if the runtime is compromised.</li>
+      </ul>
+      <h3>Can Policy Keys Be Extracted From Package ID?</h3>
+      <p>No. A package ID is public metadata; it does not expose private keys. Attackers can read object IDs and module code from chain, but they cannot derive the private key controlling the admin account from on-chain state alone.</p>
+      <div class="docs-callout"><strong>Important:</strong> Object IDs such as <code>PolicyAdminCap</code> ID are public references, not secrets. Security comes from account key custody and capability ownership rules.</div>
+
+      <div class="docs-note"><strong>Note for Judges:</strong> This split-custody model ensures that even if the AI agent's server is fully compromised, the attacker cannot disable the security firewall or bypass the Move-level transfer constraints.</div>
+    </section>
+
+    <section id="controls" class="docs-panel" data-doc-panel="controls">
+      <h2>Control Matrix</h2>
+      <div class="docs-meta">Threat-to-control mapping across runtime policy, governance checks, and on-chain enforcement.</div>
+      <h3>Threat-to-Control Mapping</h3>
+      <p>This matrix maps key threats to primary controls and expected outcomes.</p>
+      <h3>Execution Outcomes</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr>
+              <th>Threat</th>
+              <th>Primary Control</th>
+              <th>Layer</th>
+              <th>Expected Outcome</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Destructive OS command</td>
+              <td>Intent firewall + OS policy guard</td>
+              <td>Runtime</td>
+              <td>Blocked, may trigger freeze</td>
+            </tr>
+            <tr>
+              <td>Risky transfer</td>
+              <td>Risk engine + governance approval</td>
+              <td>Runtime + Telegram</td>
+              <td>Approval required or blocked</td>
+            </tr>
+            <tr>
+              <td>Policy file tamper</td>
+              <td>Policy signature verification</td>
+              <td>Runtime</td>
+              <td>Blocked + frozen</td>
+            </tr>
+            <tr>
+              <td>Anchor mismatch</td>
+              <td>On-chain hash anchor check</td>
+              <td>Runtime + Sui</td>
+              <td>Blocked + frozen</td>
+            </tr>
+            <tr>
+              <td>Runtime bypass attempt</td>
+              <td>Move <code>GlobalFreeze</code> gate</td>
+              <td>On-chain</td>
+              <td>Transfer aborts on-chain</td>
+            </tr>
+            <tr>
+              <td>Missing audit write</td>
+              <td>Walrus fail-closed mode</td>
+              <td>Runtime audit</td>
+              <td>Execution blocked</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="setup" class="docs-panel" data-doc-panel="setup">
+      <h2>ClawAll Setup</h2>
+      <div class="docs-meta">Professional runbook for first-time setup, policy safety, and clean runtime verification.</div>
+      <div class="docs-setup-hero"><strong>Separate setup track:</strong> this section is the canonical bootstrap runbook for ClawAll. Use this flow first, then continue to <code>Local Dashboard</code> under Operations for observability.</div>
+      <h3>0. Recommended Operator Flow</h3>
+      <pre><code>npm install
+npm run setup
+npm run gateway
+openclaw clawall status</code></pre>
+      <div class="docs-note"><strong>Target outcome:</strong> gateway healthy, plugin wired, strict policy mode verified, and at least one successful transfer + one blocked transfer test executed.</div>
+      <h3>1. Prerequisites</h3>
+      <ul>
+        <li>Node.js 20+ and npm available on PATH.</li>
+        <li>Sui CLI installed and wallet already initialized.</li>
+        <li>OpenClaw installed and runnable from terminal.</li>
+        <li>One funded admin wallet (for bootstrap only) and one agent wallet (runtime).</li>
+      </ul>
+      <h3>2. Standard Bootstrap Sequence</h3>
+      <div class="docs-step"><strong>Step A:</strong> Install dependencies: <code>npm install</code></div>
+      <div class="docs-step"><strong>Step B:</strong> Run setup workflow to configure package/agent and perform vault funding/governance setup.</div>
+      <div class="docs-step"><strong>Step C:</strong> Run runtime setup to install plugin + refresh OpenClaw config.</div>
+      <div class="docs-step"><strong>Step D:</strong> Verify health and status before first transfer.</div>
+      <pre><code>npm install
+npm run setup
+npm run gateway</code></pre>
+      <div class="docs-note">`npm run setup` supports multi-coin deposits in one session. You can deposit SUI + other tokens, then select `0` to finish.</div>
+      <div class="docs-note">Use <code>npm run topup</code> for quick refill only (vault funding without rerunning full bootstrap/governance flow).</div>
+      <div class="docs-note"><code>npm run setup</code> is the primary setup workflow and includes bootstrap + runtime/plugin configuration.</div>
+      <h3>3. Policy Bootstrap Modes</h3>
+      <p>Use a strict mode whenever possible. Integrity-only is fallback for local dev when policy admin cap is intentionally unavailable.</p>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr>
+              <th>Mode</th>
+              <th>Command</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>strict-anchor</code></td>
+              <td><code>POLICY_CAP_ID_ONCE=0x... npm run setup</code></td>
+              <td>Anchor setup runs, mode remains strict.</td>
+            </tr>
+            <tr>
+              <td><code>integrity-only</code></td>
+              <td><code>npm run setup</code></td>
+              <td>Anchor step skipped safely, <code>POLICY_ANCHOR_MODE=off</code>.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="docs-note"><code>POLICY_CAP_ID_ONCE</code> is setup-only input. Runtime must keep <code>POLICY_CAP_ID=</code> empty.</div>
+      <h3>4. Install OpenClaw Plugin</h3>
+      <pre><code>npm run setup</code></pre>
+      <h3>5. Restart Client</h3>
+      <p>Restart OpenClaw app and open a new chat session so plugin routes and slash commands are loaded.</p>
+      <h3>6. Verify Runtime</h3>
+      <pre><code>curl -s http://127.0.0.1:3011/health
+openclaw clawall status</code></pre>
+      <h3>7. No-Tamper Setup Checklist</h3>
+      <ul>
+        <li>Ensure strict policy setup was run after latest policy changes.</li>
+        <li>Do not rerun setup in a way that downgrades anchor mode unintentionally.</li>
+        <li>If policy files changed, re-anchor policy hash before protected transfer tests.</li>
+        <li>Keep <code>POLICY_BUNDLE_SHA256</code> synced with latest signed policy bundle hash.</li>
+      </ul>
+      <h3>8. Fixing Tamper Guard "expected vs got" Hash Error</h3>
+      <ol>
+        <li>Confirm current runtime policy hash in <code>.env</code> and compare with strict setup output.</li>
+        <li>Run strict policy setup again using admin flow to write the correct hash + anchor.</li>
+        <li>Run <code>npm run setup</code> to refresh plugin/runtime config only after strict policy step succeeds.</li>
+        <li>Restart gateway/OpenClaw and re-run a small transfer test.</li>
+      </ol>
+      <pre><code>rg -n "^(POLICY_BUNDLE_SHA256|POLICY_ANCHOR_ID|POLICY_INTEGRITY_MODE|POLICY_ANCHOR_MODE)=" .env
+npm run setup
+openclaw clawall status</code></pre>
+      <div class="docs-note">If you answer <code>y</code> to "Review/edit .env", setup helper runs first and plugin install may appear twice. This is expected in interactive mode.</div>
+      <div class="docs-note">If <code>/health</code> is down, start the gateway first. If status works in CLI but not chat, restart OpenClaw and start a new conversation.</div>
+      <div class="docs-note">For silent-failure diagnosis, run gateway with verbose request logging: <code>CLAWALL_GATEWAY_VERBOSE=1 npm run gateway</code>.</div>
+      <h3>9. Final Verification (Must Pass)</h3>
+      <ul>
+        <li><code>curl -s http://127.0.0.1:3011/health</code> returns <code>ok: true</code>.</li>
+        <li><code>openclaw clawall wallet</code> returns balances without schema warnings.</li>
+        <li>At least one guarded transfer returns digest + explorer link.</li>
+        <li>At least one unsafe scenario is blocked by policy/firewall/freeze layer.</li>
+      </ul>
+    </section>
+
+    <section id="testnet" class="docs-panel" data-doc-panel="testnet">
+      <h2>Testnet & Faucet</h2>
+      <div class="docs-meta">Funding, token prep, and basic network checks for reliable demos.</div>
+      <h3>1. Configure Testnet RPC</h3>
+      <p>Set your RPC endpoint to Sui testnet in <code>.env</code>, then confirm chain connectivity before any setup flow.</p>
+      <pre><code>RPC_URL=https://fullnode.testnet.sui.io:443
+sui client active-address
+sui client gas</code></pre>
+      <h3>2. Get Testnet SUI (Gas)</h3>
+      <p>Use the official Sui faucet or supported faucet channels to fund both wallets with enough SUI for setup and demo transfers.</p>
+      <ul>
+        <li>Fund admin wallet for bootstrap/governance transactions.</li>
+        <li>Fund agent wallet for runtime transaction fees.</li>
+        <li>Keep extra margin for repeated demo attempts.</li>
+      </ul>
+      <div class="docs-callout"><strong>Practical target:</strong> keep at least 0.1-0.2 testnet SUI in each wallet before demos to avoid failed transactions caused by gas depletion.</div>
+      <h3>3. Verify Wallet Balances</h3>
+      <pre><code>openclaw clawall wallet
+sui client balance</code></pre>
+      <h3>4. Non-SUI Demo Tokens</h3>
+      <p>For USDC/HASUI/HAWAL/WAL test flows, your admin wallet must already hold those test assets. ClawAll cannot mint assets; it only secures transfer paths for available balances.</p>
+      <h3>5. Faucet/Network Troubleshooting</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr>
+              <th>Issue</th>
+              <th>Likely Cause</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>No gas balance after faucet</td>
+              <td>Wrong wallet address or faucet delay</td>
+              <td>Recheck active address and retry after propagation delay</td>
+            </tr>
+            <tr>
+              <td>Setup tx fails</td>
+              <td>Insufficient SUI gas</td>
+              <td>Refill SUI and rerun setup step</td>
+            </tr>
+            <tr>
+              <td>Transfer rejected due to epoch/expiry timing</td>
+              <td>Old constraint window</td>
+              <td>Recreate transfer through ClawAll so fresh constraint is minted</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="config" class="docs-panel" data-doc-panel="config">
+      <h2>Configuration</h2>
+      <div class="docs-meta">Authoritative runtime configuration, custody boundaries, and secure operational defaults.</div>
+      <h3>Required Runtime Values</h3>
+      <p>Required runtime values in <code>.env</code>:</p>
+      <pre><code>PACKAGE_ID=
+RPC_URL=
+PRIVATE_KEY=
+GUARD_CAP_ID=
+FREEZE_STATE_ID=
+CLAWALL_PLUGIN_KEY=
+CLAWALL_ENFORCE_PLUGIN_GATE=1</code></pre>
+      <h3>Secrets and Custody Rules</h3>
+      <ul>
+        <li>Do not store admin private key in <code>.env</code> or repo files.</li>
+        <li>Use admin private key only in interactive one-time bootstrap flows.</li>
+        <li>Runtime key should be least-privilege and isolated from policy-admin authority.</li>
+        <li>Never commit <code>.env</code> or shell history containing private keys.</li>
+      </ul>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Purpose</th>
+              <th>Required</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>PACKAGE_ID</code></td>
+              <td>Deployed Move package used by gateway transfer calls.</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><code>PRIVATE_KEY</code></td>
+              <td>Runtime signer for guarded execution path.</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><code>ADMIN_PRIVATE_KEY</code></td>
+              <td><strong>Not persisted.</strong> Use interactive prompt during admin setup only.</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td><code>CLAWALL_PLUGIN_KEY</code></td>
+              <td>Shared secret between plugin and gateway transfer endpoint.</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><code>TG_OPERATOR_IDS</code></td>
+              <td>Allowed operator user IDs for approval/freeze commands.</td>
+              <td>Recommended</td>
+            </tr>
+            <tr>
+              <td><code>POLICY_CAP_ID_ONCE</code></td>
+              <td>One-time policy admin cap used only during bootstrap commands.</td>
+              <td>Optional</td>
+            </tr>
+            <tr>
+              <td><code>PRIVACY_CAP_ID</code> (if enabled)</td>
+              <td>Sensitive capability ID; treat as privileged metadata and avoid broad sharing.</td>
+              <td>Optional</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Recommended Security Mode</h3>
+      <p>Recommended safety mode:</p>
+      <pre><code>POLICY_INTEGRITY_MODE=strict
+POLICY_ANCHOR_MODE=strict
+ENFORCE_CAP_ISOLATION=1
+POLICY_CAP_ID=</code></pre>
+      <h3>Policy/Anchor Consistency Values</h3>
+      <pre><code>POLICY_BUNDLE_SHA256=...
+POLICY_ANCHOR_ID=0x...
+POLICY_ANCHOR_MODE=strict</code></pre>
+      <div class="docs-note">If <code>POLICY_ANCHOR_MODE=off</code> while integrity is strict, runtime still checks local bundle hash but does not require on-chain anchor match.</div>
+      <h3>Setup-Only Policy Input</h3>
+      <p>Setup-only policy input:</p>
+      <pre><code>POLICY_CAP_ID_ONCE=0x...   # set only for setup command
+# after setup, keep POLICY_CAP_ID_ONCE empty</code></pre>
+      <h3>Privacy Cap Handling Guidelines</h3>
+      <ul>
+        <li>Treat privacy cap IDs as sensitive operational metadata.</li>
+        <li>Avoid logging full IDs in public demos/screenshots.</li>
+        <li>If leaked, rotate associated policy/cap state according to your governance process.</li>
+        <li>Never bundle privacy capabilities into general runtime automation unless required.</li>
+      </ul>
+      <h3>Market Price Configuration</h3>
+      <p>Pricing config (optional but recommended):</p>
+      <pre><code>COINGECKO_DEMO_API_KEY=CG-xxxx
+MARKET_PRICE_REQUEST_MODE=single
+MARKET_COINGECKO_ID_BY_SYMBOL_JSON={"USDC":"usd-coin","HASUI":"haedal-staked-sui","WAL":"walrus-2","HAWAL":"haedal-staked-wal"}</code></pre>
+      <div class="docs-note"><code>MARKET_PRICE_REQUEST_MODE=single</code> is preferred in production to fetch only requested symbols and reduce API quota usage.</div>
+      <h3>OpenClaw Plugin Config Compatibility</h3>
+      <p>Use only schema-approved plugin install fields. Non-standard keys in <code>~/.openclaw/openclaw.json</code> cause warnings and may disable strict config validation.</p>
+      <pre><code>openclaw plugins doctor
+openclaw doctor --fix</code></pre>
+    </section>
+
+    <section id="usage" class="docs-panel" data-doc-panel="usage">
+      <h2>Usage</h2>
+      <div class="docs-meta">Deterministic command usage, natural-language routing behavior, and operator-safe patterns.</div>
+      <h3>Chat Commands (Deterministic)</h3>
+      <ul>
+        <li>Transfer via policy path: <code>/clawall_transfer --amount 10000000 --recipient 0x...</code></li>
+        <li>Transfer + exact USD quote in one step: <code>/clawall_transfer_quote send 0.0324 sui to 0x... and tell me exact usd value</code></li>
+        <li>Check status: <code>/clawall_status</code></li>
+        <li>Wallet balances: <code>/clawall_wallet</code></li>
+        <li>Price lookup: <code>/clawall_price --unit wal --amount 1000000000</code></li>
+        <li>Wallet + price snapshot together: <code>/clawall_snapshot show me price of sui and my wallet bal</code></li>
+      </ul>
+      <h3>Natural Language Routing</h3>
+      <p>ClawAll supports natural text, but critical flows should still use slash commands for determinism. NL parser maps phrases to canonical actions (wallet, transfer, status, price).</p>
+      <div class="docs-grid-2">
+        <div class="docs-mini">
+          <strong>Recommended</strong>
+          <code>/clawall_transfer --amount 4300 --unit usdc --recipient 0x...</code>
+        </div>
+        <div class="docs-mini">
+          <strong>Supported</strong>
+          <code>send 0.0043 usdc to 0x... and show my balance</code>
+        </div>
+      </div>
+      <h3>CLI Equivalents</h3>
+      <pre><code>openclaw clawall status
+openclaw clawall wallet
+openclaw clawall transfer --amount 10000000 --recipient 0x...
+openclaw clawall transfer-quote --amount 0.0324 --unit sui --recipient 0x...
+openclaw clawall price --unit hasui --amount 1000000000</code></pre>
+      <h3>Human-Readable Response Patterns</h3>
+      <ul>
+        <li>Ask explicitly: <code>reply in simple human text</code> or <code>no json</code>.</li>
+        <li>For transfer proofs ask: <code>include tx digest + explorer link + updated balances</code>.</li>
+        <li>For wallet clarity ask: <code>group by token and total both USDC coins together</code>.</li>
+      </ul>
+      <h3>Operational Guidance</h3>
+      <ul>
+        <li>Use slash commands for security-critical actions and incident playbooks.</li>
+        <li>Use natural language for low-risk reads (<code>status</code>, <code>wallet</code>, price checks).</li>
+        <li>Combined intent is auto-routed: <code>show me price of sui and my wallet bal</code> → <code>/clawall_snapshot ...</code>.</li>
+        <li>Treat price lookups as advisory if upstream market data is unavailable.</li>
+        <li>Natural transfer bundles are supported: <code>send 0.034 sui and 0.0034 wal to 0x...</code>.</li>
+        <li>If request includes wallet balance, transfer response includes a post-transfer wallet snapshot.</li>
+      </ul>
+      <h3>Command Pitfalls</h3>
+      <ul>
+        <li>If CLI reports unknown option (for example <code>--unit</code>), update plugin/build and rerun <code>npm run setup</code>.</li>
+        <li>If NL request gives wrong token inference, force with explicit <code>--unit</code> or full <code>coin_type</code>.</li>
+        <li>If wallet tool fails with schema error, run OpenClaw plugin doctor and validate gateway/plugin version alignment.</li>
+      </ul>
+    </section>
+
+    <section id="price" class="docs-panel" data-doc-panel="price">
+      <h2>Price API</h2>
+      <div class="docs-meta">Market pricing endpoint, supported symbol mapping, and safe fallback behavior.</div>
+      <p>Endpoint: <code>GET /v1/price?coin_type=&lt;type&gt;&amp;amount=&lt;base_units_optional&gt;</code></p>
+      <pre><code>curl -s "http://127.0.0.1:3011/v1/price?coin_type=0x2::sui::SUI&amount=1000000000"</code></pre>
+      <p>Response fields include <code>price_usd</code>, <code>decimals</code>, <code>symbol</code>, and <code>transfer_usd</code> (when amount is provided).</p>
+      <p>Supported by default mapping: <code>USDC</code>, <code>HASUI</code>, <code>WAL</code>, <code>HAWAL</code>. Extend via env mappings.</p>
+      <h3>Security Position On Pricing</h3>
+      <ul>
+        <li>Price lookup is informational and should not be the sole block/allow signal for secure transfer execution.</li>
+        <li>Risk engine should remain safe when price feed is unavailable.</li>
+        <li>When price feed fails, show advisory warning but keep core constraint checks active.</li>
+      </ul>
+      <h3>Examples</h3>
+      <pre><code>/clawall_price --unit usdc --amount 1000000000
+/clawall_price --unit wal --amount 5000000000
+openclaw clawall price --unit hasui --amount 1000000000</code></pre>
+      <h3>Token Symbol Tips</h3>
+      <ul>
+        <li>Use normalized uppercase symbols internally (<code>USDC</code>, <code>HASUI</code>, <code>HAWAL</code>, <code>WAL</code>).</li>
+        <li>If a symbol is not recognized, pass full <code>coin_type</code>.</li>
+        <li>For hacked/demo tokens, set explicit mapping in <code>MARKET_COINGECKO_ID_BY_SYMBOL_JSON</code>.</li>
+      </ul>
+      <h3>Fallback Model</h3>
+      <ul>
+        <li>Primary source: CoinGecko id mapping by symbol.</li>
+        <li>Optional fallback: fixed USD overrides for emergency mode.</li>
+        <li>Stable assets can be treated with tighter default bounds.</li>
+      </ul>
+    </section>
+
+    <section id="gateway" class="docs-panel" data-doc-panel="gateway">
+      <h2>Gateway API</h2>
+      <div class="docs-meta">Service endpoints, health diagnostics, and protected transfer route requirements.</div>
+      <h3>Service Endpoints</h3>
+      <p>Service endpoints:</p>
+      <ul>
+        <li><code>GET /health</code></li>
+        <li><code>GET /v1/status</code></li>
+        <li><code>GET /v1/wallet</code></li>
+        <li><code>GET /v1/price</code></li>
+        <li><code>POST /v1/check</code></li>
+        <li><code>POST /v1/signed-transfer</code> (plugin-key gated)</li>
+      </ul>
+      <h3>Health and Status</h3>
+      <pre><code>curl -s http://127.0.0.1:3011/health
+curl -s http://127.0.0.1:3011/v1/status</code></pre>
+      <h3>Verbose Debug Mode</h3>
+      <pre><code>CLAWALL_GATEWAY_VERBOSE=1 npm run gateway</code></pre>
+      <p>Logs each request path + status, and prints explicit errors for 4xx/5xx responses.</p>
+      <h3>Protected Transfer Route</h3>
+      <p>Protected transfer route requires plugin key:</p>
+      <pre><code>curl -s -X POST http://127.0.0.1:3011/v1/signed-transfer   -H 'content-type: application/json'   -H "x-clawall-plugin-key: $CLAWALL_PLUGIN_KEY"   -d '{"amount":10000000,"recipient":"0x..."}'</code></pre>
+      <div class="docs-note">Do not expose <code>/v1/signed-transfer</code> publicly without network-level controls. Keep it private to OpenClaw runtime and trusted operators.</div>
+      <h3>Plugin Provenance & Warning-Free Install</h3>
+      <ul>
+        <li>Always install plugin through <code>openclaw plugins install ...</code> instead of manual file copy.</li>
+        <li>Keep <code>plugins.allow</code> explicit with only trusted plugin IDs.</li>
+        <li>Use OpenClaw doctor tools to normalize schema and remove stale keys.</li>
+      </ul>
+      <pre><code>openclaw plugins doctor
+openclaw doctor --fix
+openclaw plugins list</code></pre>
+      <h3>Expected Healthy Signals</h3>
+      <ul>
+        <li><code>openclaw plugins doctor</code> returns no issues.</li>
+        <li><code>openclaw clawall wallet</code> has no config schema warnings.</li>
+        <li>Gateway health endpoint returns <code>ok</code> and version metadata.</li>
+      </ul>
+    </section>
+
+    <section id="dashboard-local" class="docs-panel" data-doc-panel="dashboard-local">
+      <h2>Local Dashboard</h2>
+      <div class="docs-meta">Operator-only local observability surface. Not part of hosted public web output.</div>
+      <h3>Purpose</h3>
+      <p>The dashboard is intended for local operator visibility only. It should be launched through a local proxy so browser clients never need the plugin key.</p>
+      <div class="docs-note"><strong>Important:</strong> Dashboard files are not in <code>src/public</code> and are intentionally excluded from Netlify-hosted public site output.</div>
+
+      <h3>Run Sequence</h3>
+      <pre><code># terminal 1
+npm run gateway
+
+# terminal 2
+npm run dashboard</code></pre>
+
+      <h3>Open In Browser</h3>
+      <pre><code>http://127.0.0.1:3020/dashboard.html</code></pre>
+
+      <h3>How It Works</h3>
+      <ul>
+        <li><code>dashboard-local.mjs</code> serves static dashboard files from <code>src/local/dashboard</code>.</li>
+        <li>It proxies <code>/api/*</code> to local gateway <code>http://127.0.0.1:3011</code>.</li>
+        <li>The proxy injects plugin key server-side from <code>CLAWALL_PLUGIN_KEY</code>.</li>
+        <li>Frontend uses <code>/api</code> by default, avoiding direct cross-origin calls.</li>
+      </ul>
+
+      <h3>Environment Variables (Optional)</h3>
+      <pre><code>CLAWALL_DASHBOARD_HOST=127.0.0.1
+CLAWALL_DASHBOARD_PORT=3020
+CLAWALL_DASHBOARD_GATEWAY=http://127.0.0.1:3011</code></pre>
+      <h3>Operational Checklist</h3>
+      <ul>
+        <li>Keep gateway bound to <code>127.0.0.1</code> only for local security boundary.</li>
+        <li>Do not expose dashboard-local port through public tunnels in production contexts.</li>
+        <li>If dashboard shows endpoint errors, verify gateway is running and plugin key is configured in local env.</li>
+        <li>Use dashboard for observability, not as the primary source of truth for critical approvals.</li>
+      </ul>
+    </section>
+
+    <section id="security" class="docs-panel" data-doc-panel="security">
+      <h2>Security</h2>
+      <div class="docs-meta">Mandatory controls, split-custody model, and incident response baseline.</div>
+      <h3>Hard Requirements</h3>
+      <ul>
+        <li>Split custody: runtime host must not hold <code>POLICY_CAP_ID</code>.</li>
+        <li>On-chain freeze controls transfer execution independently of runtime state.</li>
+        <li>Policy integrity and anchor checks trigger freeze on tamper.</li>
+        <li>Plugin key gate prevents direct transfer-route bypass.</li>
+      </ul>
+      <h3>GuardCap Protection Rules</h3>
+      <ul>
+        <li>GuardCap is operationally sensitive; do not publish full ID in public recordings.</li>
+        <li>Run runtime host as least-privileged user with isolated filesystem permissions.</li>
+        <li>Restrict who can access terminal/session where runtime key and guard config are present.</li>
+        <li>If GuardCap is suspected exposed, engage freeze and rotate to a new operational setup.</li>
+      </ul>
+      <h3>What Happens If Agent Key Is Stolen?</h3>
+      <p>A stolen agent key alone should not allow unrestricted drain when ClawAll is correctly configured, because transfer parameters are bound by policy path + Move constraints and can be globally halted via freeze controls.</p>
+      <div class="docs-callout"><strong>Critical caveat:</strong> if attacker gets both admin authority and runtime authority, guarantees collapse. Split custody is mandatory, not optional.</div>
+      <h3>Verification Checklist</h3>
+      <ul>
+        <li>Run routing proof to validate plugin-key gate and policy path.</li>
+        <li>Run tests after config changes and before deployment.</li>
+        <li>Verify freeze/resume commands work from approved operators only.</li>
+      </ul>
+      <pre><code>npm run security:prove-routing
+npm test</code></pre>
+      <h3>Policy Mode Checks</h3>
+      <pre><code>grep -E 'POLICY_(INTEGRITY_MODE|ANCHOR_MODE|CAP_ID|CAP_ID_ONCE)' .env
+
+# expected runtime:
+# POLICY_INTEGRITY_MODE=strict
+# POLICY_CAP_ID=
+# POLICY_CAP_ID_ONCE=</code></pre>
+      <h3>Incident Response Runbook</h3>
+      <ol>
+        <li>Trigger freeze path immediately (runtime + on-chain).</li>
+        <li>Stop gateway and OpenClaw runtime processes.</li>
+        <li>Audit latest transfer/audit logs and verify unauthorized digests.</li>
+        <li>Rotate runtime secrets and rebuild from clean policy anchor.</li>
+        <li>Resume only after strict-mode checks pass end-to-end.</li>
+      </ol>
+    </section>
+
+    <section id="testing" class="docs-panel" data-doc-panel="testing">
+      <h2>Testing</h2>
+      <div class="docs-meta">Automated checks, manual test matrix, and demo evidence requirements.</div>
+      <h3>Automated Checks</h3>
+      <pre><code>npm test
+cd chain/sui && sui move build
+npm run benchmark:redteam
+npm run forensics:bundle</code></pre>
+      <h3>Pre-Demo Smoke Test</h3>
+      <pre><code>npm run setup
+curl -s http://127.0.0.1:3011/health
+openclaw plugins doctor
+openclaw clawall status
+openclaw clawall wallet</code></pre>
+      <h3>Manual Test Matrix</h3>
+      <div class="docs-table-wrap">
+        <table class="docs-table">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Action</th>
+              <th>Expected</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Normal transfer</td>
+              <td>Demo option <code>1</code></td>
+              <td>Executes unless freeze is active</td>
+            </tr>
+            <tr>
+              <td>Medium/high risk</td>
+              <td>Demo option <code>2</code>/<code>3</code></td>
+              <td>Governance approval path is triggered</td>
+            </tr>
+            <tr>
+              <td>OS attack</td>
+              <td>Demo option <code>4</code></td>
+              <td>Blocked at firewall, freeze behavior visible</td>
+            </tr>
+            <tr>
+              <td>Tamper simulation</td>
+              <td>Demo option <code>9</code></td>
+              <td>Blocked and frozen by integrity/anchor checks</td>
+            </tr>
+            <tr>
+              <td>Bypass route</td>
+              <td>Direct <code>/v1/signed-transfer</code> without key</td>
+              <td><code>401 unauthorized</code></td>
+            </tr>
+            <tr>
+              <td>Tamper hash mismatch</td>
+              <td>Edit policy file then run transfer</td>
+              <td><code>TAMPER_GUARD</code> blocks with expected vs got hash</td>
+            </tr>
+            <tr>
+              <td>Recovery after tamper</td>
+              <td>Run strict setup + runtime setup</td>
+              <td>Transfer route restored with matching policy hash</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>Evidence Checklist For Submission</h3>
+      <ul>
+        <li>Terminal clip showing successful guarded transfer and digest.</li>
+        <li>Clip showing blocked tamper scenario and freeze behavior.</li>
+        <li>Clip showing policy restore flow and successful post-fix transfer.</li>
+        <li>Plugin doctor output with no unresolved issues.</li>
+      </ul>
+    </section>
+
+    <section id="judge" class="docs-panel" data-doc-panel="judge">
+      <h2>Judge Demo Flow & Narrative</h2>
+      <div class="docs-meta">A guided narrative to showcase Sui-native AI safety.</div>
+      
+      <h3>The Narrative: Secure-by-Design AI</h3>
+      <p>ClawAll is not just an off-chain API gate. It is a <strong>Full-Stack Security System</strong> that uses Move to enforce AI safety on-chain. The demo should show that the security is <em>rooted in the blockchain</em>, not just in the agent's code.</p>
+
+      <h3>Demo Runbook (4-6 Minutes)</h3>
+      <ol>
+        <li><strong>Layer 1: Intent Firewall:</strong> Show the agent successfully running a safe command like <code>ls</code>, then immediately show it blocked when trying to <code>cat /etc/passwd</code>. This demonstrates that the firewall is understanding and sanitizing OS commands.</li>
+        <li><strong>Layer 2: Risk Scoring & Governance:</strong> Execute a transfer. Show it trigger a "Medium Risk" status and send a real alert to Telegram. Approve it via the bot to show the "human-in-the-loop" gate.</li>
+        <li><strong>Layer 3: On-Chain Enforcer:</strong> Highlight the <code>TransferConstraint</code> and <code>GlobalFreeze</code>. Explain that even if the agent's private key were stolen, the attacker <em>cannot</em> send funds to a different address or for a higher amount than what the agent authorized.</li>
+        <li><strong>Layer 4: Policy Integrity & Self-Defense:</strong> Modify a single character in the policy code. Show the agent immediately detecting the tamper and <strong>Freezing itself</strong>. Explain the <code>PolicyAnchor</code> check: the agent verifies its own code hash against a hash anchored on Sui.</li>
+      </ol>
+
+      <div class="docs-note"><strong>Key Takeaway:</strong> ClawAll makes autonomous agents "safe enough for Sui" by using Move to create immutable, on-chain safety boundaries that can't be bypassed by model hallucinations or runtime compromises.</div>
+    </section>
+
+    <section id="faq" class="docs-panel" data-doc-panel="faq">
+      <h2>FAQ</h2>
+      <div class="docs-meta">Common operational and security questions answered for fast triage.</div>
+      <h3>What if the agent edits local state to unfreeze itself?</h3>
+      <p>Local edits alone are insufficient. Integrity checks, optional anchor checks, and Move-level <code>GlobalFreeze</code> still gate execution.</p>
+      <h3>What if Telegram is unavailable?</h3>
+      <p>Actions requiring approval remain unapproved. Protected execution remains fail-closed.</p>
+      <h3>Why block when Walrus audit fails?</h3>
+      <p>ClawAll uses proof-first security for critical paths: no audit evidence, no protected execution.</p>
+      <h3>Can runtime safely keep policy admin cap?</h3>
+      <p>No. Runtime should keep <code>POLICY_CAP_ID=</code> empty; use <code>POLICY_CAP_ID_ONCE</code> only for setup commands.</p>
+      <h3>Can attackers derive admin private key from package or object IDs?</h3>
+      <p>No. IDs are public references, not private credentials.</p>
+      <h3>Should pricing block transfers?</h3>
+      <p>No by default. Price is advisory context; core security should rely on policy/approval/constraint controls.</p>
+      <h3>Can I run demo with one wallet only?</h3>
+      <p>Possible for basic demos, but split-wallet model (admin + agent) is strongly recommended for security-track judging.</p>
+    </section>
+
+    <section id="troubleshooting" class="docs-panel" data-doc-panel="troubleshooting">
+      <h2>Troubleshooting</h2>
+      <div class="docs-meta">Diagnosis and recovery for runtime, plugin, and policy consistency failures.</div>
+      <h3>Common Issues</h3>
+      <ul>
+        <li>If CLI works but GUI chat does not, restart OpenClaw and open a new chat.</li>
+        <li>If natural text misses routing, use explicit slash commands.</li>
+        <li>If price is unavailable, verify <code>COINGECKO_DEMO_API_KEY</code> and token symbol mappings in <code>.env</code>.</li>
+        <li>If <code>/v1/signed-transfer</code> fails unauthorized, verify plugin <code>api_key</code> matches <code>CLAWALL_PLUGIN_KEY</code>.</li>
+        <li>If setup prints <code>policy mode: integrity-only</code> with warning about missing <code>POLICY_CAP_ID_ONCE</code>, rerun setup with one-time cap to restore strict anchor mode.</li>
+      </ul>
+      <h3>Tamper Guard Hash Mismatch</h3>
+      <p>Symptom: transfer blocked with message like <code>expected=... got=...</code>.</p>
+      <div class="docs-grid-2">
+        <div class="docs-mini">
+          <strong>Cause</strong>
+          Policy hash in runtime env and actual signed policy bundle are out of sync.
+        </div>
+        <div class="docs-mini">
+          <strong>Fix</strong>
+          Run strict policy setup again, then rerun runtime setup and restart.
+        </div>
+      </div>
+      <pre><code>npm run setup
+openclaw clawall status</code></pre>
+      <h3>OpenClaw Config Warning About Plugin Install Keys</h3>
+      <p>If you see invalid <code>plugins.installs</code> schema keys, clean config with doctor and reinstall through official plugin install command path.</p>
+      <pre><code>openclaw doctor --fix
+openclaw plugins doctor
+npm run setup</code></pre>
+      <h3>Plugin "loaded without install provenance"</h3>
+      <p>This means plugin exists on disk but OpenClaw install metadata is missing or stale. Reinstall plugin and ensure allowlist includes plugin ID.</p>
+      <h3>Quick Diagnostics</h3>
+      <pre><code>curl -s http://127.0.0.1:3011/health
+openclaw clawall status
+openclaw clawall price --unit wal --amount 1000000000
+POLICY_CAP_ID_ONCE=0x... npm run setup</code></pre>
+      <h3>When Setup Reverts Anchor Mode To Off</h3>
+      <p>If runtime setup intentionally runs integrity-only mode, your strict anchor requirement may be disabled in <code>.env</code>. For strict demos, always finish with strict policy setup stage and verify mode values before recording.</p>
+      <pre><code>rg -n "^(POLICY_INTEGRITY_MODE|POLICY_ANCHOR_MODE|POLICY_BUNDLE_SHA256|POLICY_ANCHOR_ID)=" .env</code></pre>
+    </section>
+  </div>
+
+  <aside class="docs-outline">
+    <h3>On This Page</h3>
+    <div id="docsOutline" class="docs-outline-list"></div>
+  </aside>
+</main>
+
+<div class="divider"></div>
+<footer>
+  <div class="footer-logo"><span class="logo-mark"><svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 7v5c0 5 3.2 7.8 8 9 4.8-1.2 8-4 8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></span> <span>Claw</span>All</div>
+  <div class="footer-note">Built for autonomous AI execution security on Sui.</div>
+  <div class="footer-links">
+    <a href="https://github.com/tejas0111/clawall" target="_blank">GitHub</a>
+    <a href="https://suiscan.xyz/testnet" target="_blank">Sui Explorer</a>
+    <a href="./docs.html">Docs</a>
+  </div>
+</footer>
+
+<script>
+  const navToggle = document.querySelector('.nav-toggle');
+  const navDrawer = document.getElementById('navMenu');
+  function setNavOpen(open) {
+    if (!navToggle || !navDrawer) return;
+    navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    navDrawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+    navDrawer.classList.toggle('open', open);
+  }
+  if (navToggle && navDrawer) {
+    navToggle.addEventListener('click', () => setNavOpen(!navDrawer.classList.contains('open')));
+    navDrawer.addEventListener('click', (e) => {
+      const a = e.target.closest('a');
+      if (a) setNavOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') setNavOpen(false);
+    });
+  }
+
+  const docLinks = Array.from(document.querySelectorAll('[data-doc-link]'));
+  const docPanels = Array.from(document.querySelectorAll('[data-doc-panel]'));
+  const docsOutline = document.getElementById('docsOutline');
+
+  function slugify(value) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+      .slice(0, 48);
+  }
+
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.top = '-1000px';
+    ta.style.left = '-1000px';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+    } finally {
+      document.body.removeChild(ta);
+    }
+  }
+
+  function installCopyButtons() {
+    const blocks = document.querySelectorAll('.docs-main pre');
+    blocks.forEach((pre) => {
+      if (pre.dataset.copyReady === '1') return;
+      pre.dataset.copyReady = '1';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'docs-copy-btn';
+      btn.textContent = 'copy';
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code');
+        const text = code ? code.innerText : pre.innerText;
+        try {
+          await copyText(text);
+          btn.textContent = 'copied';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.textContent = 'copy';
+            btn.classList.remove('copied');
+          }, 1200);
+        } catch {
+          btn.textContent = 'failed';
+          setTimeout(() => {
+            btn.textContent = 'copy';
+          }, 1200);
+        }
+      });
+      pre.appendChild(btn);
+    });
+  }
+
+  function buildRightOutline(panelId) {
+    if (!docsOutline) return;
+    const panel = docPanels.find((item) => item.dataset.docPanel === panelId);
+    if (!panel) {
+      docsOutline.innerHTML = '';
+      return;
+    }
+    const headings = Array.from(panel.querySelectorAll('h3'));
+    if (headings.length === 0) {
+      docsOutline.innerHTML = '<p class="docs-outline-empty">No subheadings in this topic.</p>';
+      return;
+    }
+    headings.forEach((heading, idx) => {
+      if (!heading.id) {
+        heading.id = `${panelId}-${slugify(heading.textContent)}-${idx + 1}`;
+      }
+    });
+    docsOutline.innerHTML = headings
+      .map((heading) => `<a href="#" data-outline-target="${heading.id}">${heading.textContent}</a>`)
+      .join('');
+    const outlineLinks = Array.from(docsOutline.querySelectorAll('[data-outline-target]'));
+    outlineLinks.forEach((link, idx) => {
+      if (idx === 0) link.classList.add('active');
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        outlineLinks.forEach((item) => item.classList.remove('active'));
+        link.classList.add('active');
+        const target = document.getElementById(link.dataset.outlineTarget);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function showDocPanel(target) {
+    const exists = docPanels.some((panel) => panel.dataset.docPanel === target);
+    const safeTarget = exists ? target : 'overview';
+    docPanels.forEach((panel) => panel.classList.toggle('active', panel.dataset.docPanel === safeTarget));
+    docLinks.forEach((link) => link.classList.toggle('active', link.dataset.docLink === safeTarget));
+    buildRightOutline(safeTarget);
+    if (window.location.hash !== `#${safeTarget}`) {
+      window.history.replaceState(null, '', `#${safeTarget}`);
+    }
+  }
+
+  docLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      showDocPanel(link.dataset.docLink);
+    });
+  });
+
+  // Make all in-page hash links open the matching docs panel reliably.
+  document.addEventListener('click', (event) => {
+    const anchor = event.target.closest('a[href^="#"]');
+    if (!anchor) return;
+    const raw = (anchor.getAttribute('href') || '').trim();
+    const target = raw.replace(/^#/, '');
+    if (!target) return;
+    const panelExists = docPanels.some((panel) => panel.dataset.docPanel === target);
+    if (!panelExists) return;
+    event.preventDefault();
+    showDocPanel(target);
+    const panel = document.querySelector(`[data-doc-panel="${target}"]`);
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  installCopyButtons();
+  showDocPanel(window.location.hash.replace('#', '') || 'overview');
+  window.addEventListener('hashchange', () => {
+    showDocPanel(window.location.hash.replace('#', '') || 'overview');
+  });
+</script>
+</body>
+</html>

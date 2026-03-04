@@ -271,4 +271,7 @@ async function main() {
   console.log('\n[setup] Done.');
 }
 
-main().catch(err => console.error(err.message));
+main().catch((err) => {
+  console.error(err?.message ?? String(err));
+  process.exitCode = 1;
+});
